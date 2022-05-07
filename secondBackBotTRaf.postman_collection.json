@@ -1,0 +1,1157 @@
+{
+	"info": {
+		"_postman_id": "a2b29872-fbe2-4ac2-be2b-2bface8d6c84",
+		"name": "secondBackBotTRaf",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "userType",
+			"item": [
+				{
+					"name": "create userType",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameUserType\" : \"moderator\",\r\n    \"descriptionUserType\" : \"this is moderator\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userType",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userType"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get userType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userType",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userType"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id userType",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userType/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userType",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627490efcfc4c98421471066"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update userType",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"nameUserType\" : \"monitorDos\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userType/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userType",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627490efcfc4c98421471066"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete userType",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userType/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userType",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627490efcfc4c98421471066"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"correo@correo.com\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/api/user/signin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"user",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"manuel\",\r\n    \"email\" : \"correo@correo.com\",\r\n    \"password\" : \"123456\",\r\n    \"userType_idUserType\" : \"6275a491231d4058016c14c6\",\r\n    \"headquarters_idHeadquarter\" : \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3020/api/user/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3020",
+							"path": [
+								"api",
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/user/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "model",
+			"item": [
+				{
+					"name": "create model",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\":\"model1\",\r\n    \"platform\":\"strip\",\r\n    \"isAllowed\":\"true\",\r\n    \"headquarters_idHeadquarter\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/model",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get models",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/model",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get model by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/model/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update model",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/model/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete model",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/model/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "licenses",
+			"item": [
+				{
+					"name": "create license",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"initialDateLicense\":\"2022/5/19\",\r\n    \"nameLicense\":\"licenseUno\",\r\n    \"descriptionLicense\":\"licenseUno\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/licenses",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"licenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get licenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/licenses",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"licenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get license by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/licenses/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"licenses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62755dfbf476877b02cde959"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete license",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/licenses/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"licenses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62755dfbf476877b02cde959"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update license",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameLicense\":\"licenseUnoUp\",\r\n    \"descriptionLicense\":\"licenseUno\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/licenses/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"licenses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62755dfbf476877b02cde959"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "company",
+			"item": [
+				{
+					"name": "create company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameCompany\":\"manuelC\",\r\n    \"licenses_idLicenses\":\"6275614995699cdef25cbd1d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/company",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get companys",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/company",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get company by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/company/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"company",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62756c201171a5cc46a17a09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update company",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameCompany\":\"manuelA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/company/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"company",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62756c201171a5cc46a17a09"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete company",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/company/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"company",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62756c201171a5cc46a17a09"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "permissions",
+			"item": [
+				{
+					"name": "create permissions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"namePermission\":\"total\",\r\n    \"PermissionDescription\":\"acc total\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/permissions",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get permissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/permissions",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"permissions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get permissions by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/permissions/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"permissions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62757296f376275bb9444b01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update permission",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"namePermission\":\"total\",\r\n    \"PermissionDescription\":\"acc total\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/permissions/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"permissions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62757296f376275bb9444b01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete permission",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"namePermission\":\"total\",\r\n    \"PermissionDescription\":\"acc total\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/permissions/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"permissions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62757296f376275bb9444b01"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "userType_has_permmissions",
+			"item": [
+				{
+					"name": "create userType_has_permmissions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"permissions_idPermissions\":\"6275a488231d4058016c14c3\",\r\n    \"userType_idUserType\":\"6275a491231d4058016c14c6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userThasPer",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userThasPer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get userType_has_permmissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userThasPer",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userThasPer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get  by id userType_has_permmissions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userThasPer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userThasPer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275a49e231d4058016c14ca"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update userType_has_permmissions",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"permissions_idPermissions\":\"6275a488231d4058016c14c3\",\r\n    \"userType_idUserType\":\"6275a491231d4058016c14c6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userThasPer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userThasPer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275a49e231d4058016c14ca"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete userType_has_permmissions",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userThasPer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userThasPer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275a49e231d4058016c14ca"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "botContainer",
+			"item": [
+				{
+					"name": "create botContainer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ip\": \"191.911.0.1\",\r\n    \"typeBot\": \"\",\r\n    \"descriptionBot\": \"\",\r\n    \"latBot\": \"\",\r\n    \"lonBot\": \"\",\r\n    \"addressBot\": \"\",\r\n    \"averageDownloadSpeed\": \"\",\r\n    \"averageUploadSpeed\": \"\",\r\n    \"isp\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get botContainers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get botContainer by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update botContainer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ip\": \"191.911.0.1\",\r\n    \"typeBot\": \"1\",\r\n    \"descriptionBot\": \"\",\r\n    \"latBot\": \"\",\r\n    \"lonBot\": \"\",\r\n    \"addressBot\": \"\",\r\n    \"averageDownloadSpeed\": \"\",\r\n    \"averageUploadSpeed\": \"\",\r\n    \"isp\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete botContainer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "headquarters",
+			"item": [
+				{
+					"name": "create headquarter",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"location\":\"casa1\", \r\n    \"company_idCompany\": \"62621fb4c7707bb48bd30903\", \r\n    \"botsContainer_idBot\" : \"62621fb4c7707bb48bd30903\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/headquarter",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"headquarter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get headquarters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/headquarter",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"headquarter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get headquarter by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/headquarter/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"headquarter",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update headquarters",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ip\": \"191.911.0.1\",\r\n    \"typeBot\": \"1\",\r\n    \"descriptionBot\": \"\",\r\n    \"latBot\": \"\",\r\n    \"lonBot\": \"\",\r\n    \"addressBot\": \"\",\r\n    \"averageDownloadSpeed\": \"\",\r\n    \"averageUploadSpeed\": \"\",\r\n    \"isp\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/headquarter/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"headquarter",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete headquarter",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/headquarter/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"headquarter",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
