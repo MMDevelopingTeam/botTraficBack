@@ -1,11 +1,8 @@
 const { check } = require('express-validator')
 const { validateResult } = require('../utils/validateHelper')
 
-const validateCreateCompany = [
-    check('nameCompany', 'El campo es requerido')
-    .exists()
-    .notEmpty(),
-    check('typeCompany', 'El campo es requerido')
+const validateCreateWorkDay = [
+    check('range', 'El campo es requerido')
     .exists()
     .notEmpty(),
     (req, res, next) => {
@@ -13,4 +10,4 @@ const validateCreateCompany = [
     }
 ]
 
-module.exports = {validateCreateCompany}
+module.exports = {validateCreateWorkDay}

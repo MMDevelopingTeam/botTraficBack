@@ -3,7 +3,7 @@ const licensesModels = require('../models/licenses');
 
 // create company
 const createCompany = async (req, res) => {
-    const { nameCompany, licenses_idLicenses } = req.body;
+    const { nameCompany, typeCompany, addressCompany, telephoneCompany, logo } = req.body;
     try {
         const dataCompany = await companyModels.findOne({nameCompany})
         if (dataCompany) {
@@ -12,16 +12,8 @@ const createCompany = async (req, res) => {
                 message: "La compañia ya existe."
             });
         }
-        const datalicense = await licensesModels.findOne({_id: licenses_idLicenses})
-        if (!datalicense) {
-            return res.status(403).send({
-                success: false,
-                message: "La licencia no existe"
-            });
-        }
         const newCompany = new companyModels({
-            nameCompany,
-            licenses_idLicenses
+            nameCompany, typeCompany, addressCompany, telephoneCompany, logo
         })
         await newCompany.save()
         return res.status(200).send({
@@ -90,7 +82,7 @@ const getCompanyByID = async (req, res) => {
 
 // update company
 const updateCompany = async (req, res) => {
-    const { nameCompany, licenses_idLicenses } = req.body;
+    const { nameCompany, typeCompany, addressCompany, telephoneCompany, logo } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -109,8 +101,17 @@ const updateCompany = async (req, res) => {
         if (nameCompany != undefined) {
             dataCompany.nameCompany=nameCompany
         }
-        if (licenses_idLicenses != undefined) {
-            dataCompany.licenses_idLicenses=licenses_idLicenses
+        if (typeCompany != undefined) {
+            dataCompany.typeCompany=typeCompany
+        }
+        if (addressCompany != undefined) {
+            dataCompany.addressCompany=addressCompany
+        }
+        if (telephoneCompany != undefined) {
+            dataCompany.telephoneCompany=telephoneCompany
+        }
+        if (logo != undefined) {
+            dataCompany.logo=logo
         }
         await dataCompany.save()
         return res.status(200).send({

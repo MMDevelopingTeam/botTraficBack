@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 
 const CompanySchema = new mongoose.Schema(
     {
-        nameCompany: {type: String, required: true},
-        licenses_idLicenses: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'licenses_idLicenses' }
+        nameCompany: {type: String, required: true, maxlength:40},
+        typeCompany: {type: String, required: true, maxlength:45},
+        addressCompany: {type: String, maxlength:45},
+        telephoneCompany: {type: String, maxlength:25},
+        logo: {type: String, maxlength:100}
     }
 )
 

@@ -90,6 +90,36 @@ const getModelByID = async (req, res) => {
         
     }
 }
+// get by id headQ model
+const getModelByIDheadQ = async (req, res) => {
+    const { id } = req.params
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    try {
+        const dataModel = await modelModels.find({headquarters_idHeadquarter: id})
+        if (!dataModel) {
+            return res.status(400).send({
+                success: false,
+                message: "modelo no encontrada"
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "modelos traidas correctamente.",
+            dataModel
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
 
 // update model
 const updateModel = async (req, res) => {
@@ -168,4 +198,4 @@ const deleteModel = async (req, res) => {
 }
 
 
-module.exports = {createModel, getModel, getModelByID, updateModel, deleteModel};
+module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, updateModel, deleteModel};

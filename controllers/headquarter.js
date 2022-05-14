@@ -4,7 +4,8 @@ const botContainerModels = require('../models/botContainer');
 
 // create headquarter
 const createHeadquarter = async (req, res) => {
-    const { location, company_idCompany, botsContainer_idBot } = req.body;
+    const { nameHeadquarter, telephoneNumber, addressHQ, company_idCompany } = req.body;
+    
     try {
         const dataCompany = await companyModels.findOne({_id: company_idCompany})
         if (!dataCompany) {
@@ -13,15 +14,8 @@ const createHeadquarter = async (req, res) => {
                 message: "Compañia no encontrada"
             });
         }
-        const databotContainer = await botContainerModels.findOne({_id: botsContainer_idBot})
-        if (!databotContainer) {
-            return res.status(403).send({
-                success: false,
-                message: "botContainer no encontrado"
-            });
-        }
         const newHeadquarter = new headquarterModels({
-            location, company_idCompany, botsContainer_idBot
+            nameHeadquarter, telephoneNumber, addressHQ, company_idCompany
         })
         await newHeadquarter.save()
         return res.status(200).send({
@@ -88,9 +82,40 @@ const getheadquarterByID = async (req, res) => {
     }
 }
 
+// get by id of company headquarter
+const getheadquarterByIDCompany = async (req, res) => {
+    const { id } = req.params
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    try {
+        const dataHeadquarter = await headquarterModels.find({company_idCompany: id})
+        if (!dataHeadquarter) {
+            return res.status(400).send({
+                success: false,
+                message: "Sede no encontrada"
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Sede traida correctamente.",
+            dataHeadquarter
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
+
 // update headquarter
 const updateHeadquarter = async (req, res) => {
-    const { location, company_idCompany, botsContainer_idBot } = req.body;
+    const { nameHeadquarter, telephoneNumber, addressHQ, company_idCompany } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -106,8 +131,11 @@ const updateHeadquarter = async (req, res) => {
                 message: "Sede no encotrada"
             });
         }
-        if (location != undefined) {
-            dataHeadquarter.location=location
+        if (nameHeadquarter != undefined) {
+            dataHeadquarter.nameHeadquarter=nameHeadquarter
+        }
+        if (telephoneNumber != undefined) {
+            dataHeadquarter.telephoneNumber=telephoneNumber
         }
         if (company_idCompany != undefined) {
             const dataCompany = await companyModels.findOne({_id: company_idCompany})
@@ -119,15 +147,8 @@ const updateHeadquarter = async (req, res) => {
             }
             dataHeadquarter.company_idCompany=company_idCompany
         }
-        if (botsContainer_idBot != undefined) {
-            const databotContainer = await botContainerModels.findOne({_id: botsContainer_idBot})
-            if (!databotContainer) {
-                return res.status(400).send({
-                    success: false,
-                    message: "BotsContainer no encotrado"
-                });
-            }
-            dataHeadquarter.botsContainer_idBot=botsContainer_idBot
+        if (addressHQ != undefined) {
+            dataHeadquarter.addressHQ=addressHQ
         }
         await dataHeadquarter.save()
         return res.status(200).send({
@@ -173,4 +194,4 @@ const deleteHeadquarter = async (req, res) => {
 }
 
 
-module.exports = {createHeadquarter, getheadquarters, getheadquarterByID, updateHeadquarter, deleteHeadquarter};
+module.exports = {createHeadquarter, getheadquarters, getheadquarterByID, getheadquarterByIDCompany, updateHeadquarter, deleteHeadquarter};

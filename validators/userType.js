@@ -23,5 +23,16 @@ const validateCreateUserTypeHasP = [
         validateResult(req, res, next)
     }
 ]
+const validateCreateUserTypeHas = [
+    check('user_idUser', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('userType_idUserType', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
 
-module.exports = {validateCreateUserType, validateCreateUserTypeHasP}
+module.exports = {validateCreateUserType, validateCreateUserTypeHasP, validateCreateUserTypeHas}

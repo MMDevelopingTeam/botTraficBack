@@ -1,8 +1,26 @@
 const userTypeModels = require('../models/userType');
+const permissionsModels = require('../models/permissions');
 
 // create userType
 const createUserType = async (req, res) => {
-    const { nameUserType, descriptionUserType } = req.body;
+    const { nameUserType, descriptionUserType, permissionsArray } = req.body;
+    try {
+        for (let index = 0; index < permissionsArray.length; index++) {
+          const dataP = await permissionsModels.findOne({_id: permissionsArray[index]})
+          if (!dataP) {
+            return res.status(403).send({
+              success: false,
+              message: `El permiso_id ${permissionsArray[index]} no existe`
+            });
+          }
+          
+        }
+      } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+      }
     try {
         const dataUserT = await userTypeModels.findOne({nameUserType})
         if (dataUserT) {
@@ -12,8 +30,7 @@ const createUserType = async (req, res) => {
             });
         }
         const newUserType = new userTypeModels({
-            nameUserType,
-            descriptionUserType
+            nameUserType, descriptionUserType, permissionsArray
         })
         await newUserType.save()
         return res.status(200).send({
@@ -32,7 +49,7 @@ const createUserType = async (req, res) => {
 // get userType
 const getUserType = async (req, res) => {
     try {
-        const dataUserT = await userTypeModels.find()
+        const dataUserT = await userTypeModels.find().populate({path: 'permissionsArray'})
         if (dataUserT) {
             return res.status(200).send({
                 success: true,
@@ -59,7 +76,7 @@ const getUserTypeByID = async (req, res) => {
         });
     }
     try {
-        const dataUserT = await userTypeModels.findOne({_id: id})
+        const dataUserT = await userTypeModels.findOne({_id: id}).populate({path: 'permissionsArray'})
         if (!dataUserT) {
             return res.status(400).send({
                 success: false,

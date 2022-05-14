@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nameUserType\" : \"moderator\",\r\n    \"descriptionUserType\" : \"this is moderator\"\r\n}",
+							"raw": "{\r\n    \"nameUserType\" : \"model\",\r\n    \"descriptionUserType\" : \"this is model\",\r\n    \"permissionsArray\" : [\r\n        \"6275a488231d4058016c14c3\"\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -153,7 +153,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"correo@correo.com\",\r\n    \"password\": \"\"\r\n}",
+							"raw": "{\r\n    \"email\": \"correo@correo.com\",\r\n    \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -161,14 +161,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3020/api/user/signin",
-							"protocol": "http",
+							"raw": "{{backBotTrafic}}/user/signin",
 							"host": [
-								"localhost"
+								"{{backBotTrafic}}"
 							],
-							"port": "3020",
 							"path": [
-								"api",
 								"user",
 								"signin"
 							]
@@ -183,7 +180,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"manuel\",\r\n    \"email\" : \"correo@correo.com\",\r\n    \"password\" : \"123456\",\r\n    \"userType_idUserType\" : \"6275a491231d4058016c14c6\",\r\n    \"headquarters_idHeadquarter\" : \"123456\"\r\n}",
+							"raw": "{\r\n    \"user\": \"manuel\",\r\n    \"name\": \"manuel\",\r\n    \"email\" : \"correo@correo.com\",\r\n    \"password\" : \"123456\",\r\n    \"userTypeArray\" : [\r\n        \"627d9e0927b81207843c94a0\"\r\n    ],\r\n    \"headquarters_idHeadquarter\" : \"627c621bdc8c73614559f00c\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -191,14 +188,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3020/api/user/signup",
-							"protocol": "http",
+							"raw": "{{backBotTrafic}}/user/signup",
 							"host": [
-								"localhost"
+								"{{backBotTrafic}}"
 							],
-							"port": "3020",
 							"path": [
-								"api",
 								"user",
 								"signup"
 							]
@@ -223,6 +217,305 @@
 							"variable": [
 								{
 									"key": "id",
+									"value": "627d647d973783b0750d5600"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/user/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627d647d973783b0750d5600"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjdkYTI1ZmY4NzYyZGI3ZWNlMGI5NGIiLCJpYXQiOjE2NTI0MDA3MzV9.ZULAcHyjPjUz11PYV7_BCVsGxaCDd2wg6ARitOdNC1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/user/byToken",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								"byToken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/user/email/:email",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								"email",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "correo@correo.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userTypeArray\" : [\r\n        \"627d9e0927b81207843c94a0\"\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/user/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627da25ff8762db7ece0b94b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/user/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627d647d973783b0750d5600"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user Admin",
+			"item": [
+				{
+					"name": "signin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"correo@correo.com\",\r\n    \"password\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userAdmin/signin",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userAdmin",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"manuel\",\r\n    \"user\": \"manuel\",\r\n    \"email\" : \"correo2@correo.com\",\r\n    \"password\" : \"123456\",\r\n    \"company_idCompany\" : \"627b17fa68f5e2e6c79026cf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userAdmin/signup",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userAdmin",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get userAdmin by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userAdmin/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userAdmin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get userAdmin by email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userAdmin/email/:email",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userAdmin",
+								"email",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "correo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update userAdmin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"isConfigFull\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/userAdmin/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userAdmin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627d3a3d35dcf0af21d55026"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete userAdmin",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/userAdmin/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"userAdmin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
 									"value": null
 								}
 							]
@@ -242,7 +535,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nickname\":\"model1\",\r\n    \"platform\":\"strip\",\r\n    \"isAllowed\":\"true\",\r\n    \"headquarters_idHeadquarter\":\"123456\"\r\n}",
+							"raw": "{\r\n    \"nickname\":\"model1\",\r\n    \"platform\":\"strip\",\r\n    \"isAllowed\":\"true\",\r\n    \"isActive\":\"true\",\r\n    \"headquarters_idHeadquarter\":\"627ec158137ba31437e09063\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -296,6 +589,31 @@
 								{
 									"key": "id",
 									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get model by id headQ",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/model/byHeadquarter/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model",
+								"byHeadquarter",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "headquarters"
 								}
 							]
 						}
@@ -491,7 +809,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nameCompany\":\"manuelC\",\r\n    \"licenses_idLicenses\":\"6275614995699cdef25cbd1d\"\r\n}",
+							"raw": "{\r\n    \"nameCompany\":\"manuelC\",\r\n    \"typeCompany\":\"6275614995699cdef25cbd1d\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -749,135 +1067,6 @@
 			]
 		},
 		{
-			"name": "userType_has_permmissions",
-			"item": [
-				{
-					"name": "create userType_has_permmissions",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"permissions_idPermissions\":\"6275a488231d4058016c14c3\",\r\n    \"userType_idUserType\":\"6275a491231d4058016c14c6\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backBotTrafic}}/userThasPer",
-							"host": [
-								"{{backBotTrafic}}"
-							],
-							"path": [
-								"userThasPer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get userType_has_permmissions",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{backBotTrafic}}/userThasPer",
-							"host": [
-								"{{backBotTrafic}}"
-							],
-							"path": [
-								"userThasPer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get  by id userType_has_permmissions",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{backBotTrafic}}/userThasPer/:id",
-							"host": [
-								"{{backBotTrafic}}"
-							],
-							"path": [
-								"userThasPer",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "6275a49e231d4058016c14ca"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "update userType_has_permmissions",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"permissions_idPermissions\":\"6275a488231d4058016c14c3\",\r\n    \"userType_idUserType\":\"6275a491231d4058016c14c6\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{backBotTrafic}}/userThasPer/:id",
-							"host": [
-								"{{backBotTrafic}}"
-							],
-							"path": [
-								"userThasPer",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "6275a49e231d4058016c14ca"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "delete userType_has_permmissions",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{backBotTrafic}}/userThasPer/:id",
-							"host": [
-								"{{backBotTrafic}}"
-							],
-							"path": [
-								"userThasPer",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "6275a49e231d4058016c14ca"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "botContainer",
 			"item": [
 				{
@@ -1025,7 +1214,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"location\":\"casa1\", \r\n    \"company_idCompany\": \"62621fb4c7707bb48bd30903\", \r\n    \"botsContainer_idBot\" : \"62621fb4c7707bb48bd30903\"\r\n}",
+							"raw": "{\r\n    \"nameHeadquarter\":\"casa2\", \r\n    \"telephoneNumber\":\"casa2\", \r\n    \"addressHQ\" : \"62621fb4c7707bb48bd30903\",\r\n    \"company_idCompany\": \"627a995df370974a33f8ba28\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1079,6 +1268,31 @@
 								{
 									"key": "id",
 									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get headquarters by id company",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/headquarter/company/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"headquarter",
+								"company",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "627a995df370974a33f8ba28"
 								}
 							]
 						}
@@ -1145,6 +1359,306 @@
 								{
 									"key": "id",
 									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "platform",
+			"item": [
+				{
+					"name": "create platform",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"namePlatform\":\"strp\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/platform",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"platform"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get platforms",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/platform",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"platform"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get platform by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/platform/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"platform",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6276ec5f0e533d74a0fcdf1d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update platform",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"namePlatform\":\"pl1at1\",\r\n    \"urlPlatform\":\"12334\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/platform/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"platform",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6276ec5f0e533d74a0fcdf1d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete platform",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/platform/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"platform",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "workDay",
+			"item": [
+				{
+					"name": "create workDay",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"range\":\"rango1\",\r\n    \"description\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/workDay",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"workDay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get workDays",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/workDay",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"workDay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get workDay by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/workDay/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"workDay",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6276f290828e3f73ddc8fe36"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update workDay",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"range\":\"rango1\",\r\n    \"description\":\"1223\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/workDay/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"workDay",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6276f290828e3f73ddc8fe36"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete workDay",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/workDay/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"workDay",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6276f290828e3f73ddc8fe36"
 								}
 							]
 						}

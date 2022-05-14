@@ -11,6 +11,9 @@ const validateCreateModel = [
     check('isAllowed', 'El campo es de tipo boolean')
     .exists()
     .isBoolean(),
+    check('isActive', 'El campo es de tipo boolean')
+    .exists()
+    .isBoolean(),
     check('headquarters_idHeadquarter', 'El campo es requerido')
     .exists()
     .notEmpty(),
