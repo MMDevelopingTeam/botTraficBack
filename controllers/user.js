@@ -3,6 +3,7 @@ const userModels = require('../models/user');
 const userAdminModels = require('../models/userAdmin');
 const userTypeModels = require('../models/userType');
 const headquartersModels = require('../models/headquarters');
+const modelModels = require('../models/models');
 const jwt = require('jsonwebtoken');
 
 // login
@@ -322,4 +323,60 @@ const updateUser = async (req, res) => {
     });
   }
 }
-module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser};
+
+// get token bot
+const tokenBot = async (req, res) => {
+  const { nameModel, userId } = req.body;
+  const dataModel = await modelModels.findOne({nickname: nameModel})
+  if (!dataModel) {
+    return res.status(400).send({
+      success: false,
+      message: "modelo no encontrada."
+    });
+  }
+  if (dataModel.isAllowed === false) {
+    return res.status(400).send({
+      success: false,
+      message: "modelo no permitida."
+    });
+  }
+
+  const dataUser = await userModels.findOne({ _id: userId }).populate({path: 'userTypeArray'})
+  if (!dataUser) {
+    return res.status(400).send({
+      success: false,
+      message: "Usuario no encontrado."
+    });
+  }
+  for (let index = 0; index < dataUser.userTypeArray.length; index++) {
+    if (dataUser.userTypeArray[index].nameUserType === 'moderator') {
+      break;
+    }else{
+      return res.status(400).send({
+        success: false,
+        message: "No tiene autorizacion."
+      });
+    }
+  }
+  const dataHeadQ = await headquartersModels.findOne({_id: dataModel.headquarters_idHeadquarter})
+  if (!dataHeadQ) {
+    return res.status(400).send({
+      success: false,
+      message: "Sede no encontrada."
+    });
+  }
+  try {
+    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany}, process.env.KEY_JWT)
+    return res.status(200).send({
+      success: true,
+      message: "Token creado correctamente",
+      token
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+    });
+  }
+}
+module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenBot};
