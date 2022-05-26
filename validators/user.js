@@ -73,6 +73,10 @@ const validateCreateToken = [
     check('userId', 'El campo es requerido')
     .exists()
     .notEmpty(),
+    check('nBots', 'El campo es Numérico')
+    .exists()
+    .isNumeric()
+    .notEmpty(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

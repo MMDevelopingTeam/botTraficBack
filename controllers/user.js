@@ -9,12 +9,17 @@ const jwt = require('jsonwebtoken');
 // login
 const signIn = async (req, res) => {
     const { email, password } = req.body;
-    const user =  await userModels.findOne({email}).populate({path: 'userTypeArray'})
-    if (!user) return res.status(404).send({
-      success: false,
-      message: "El usuario no existe"
-    });
-
+    let user = null
+    const dataUser = await userModels.findOne({email}).populate({path: 'userTypeArray'})
+    const dataUserAdmin = await userAdminModels.findOne({email})
+    if (dataUser || dataUserAdmin) {
+      user=dataUser || dataUserAdmin
+    }else{
+      return res.status(404).send({
+        success: false,
+        message: "El usuario no existe"
+      });
+    }
     const checkPassword = await compare(password, user.password)
     if (checkPassword) {
       const token = jwt.sign({_id: user._id}, process.env.KEY_JWT)
@@ -326,7 +331,7 @@ const updateUser = async (req, res) => {
 
 // get token bot
 const tokenBot = async (req, res) => {
-  const { nameModel, userId } = req.body;
+  const { nameModel, userId, nBots } = req.body;
   const dataModel = await modelModels.findOne({nickname: nameModel})
   if (!dataModel) {
     return res.status(400).send({
@@ -366,7 +371,7 @@ const tokenBot = async (req, res) => {
     });
   }
   try {
-    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany}, process.env.KEY_JWT)
+    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots}, process.env.KEY_JWT)
     return res.status(200).send({
       success: true,
       message: "Token creado correctamente",
@@ -382,7 +387,7 @@ const tokenBot = async (req, res) => {
 
 // get token killBot
 const tokenKillBot = async (req, res) => {
-  const { nameModel, userId } = req.body;
+  const { nameModel, userId, nBots } = req.body;
   const dataModel = await modelModels.findOne({nickname: nameModel})
   if (!dataModel) {
     return res.status(400).send({
@@ -422,7 +427,7 @@ const tokenKillBot = async (req, res) => {
     });
   }
   try {
-    const token = jwt.sign({nameModel, userId}, process.env.KEY_JWT)
+    const token = jwt.sign({nameModel, userId, nBots}, process.env.KEY_JWT)
     return res.status(200).send({
       success: true,
       message: "Token creado correctamente",
