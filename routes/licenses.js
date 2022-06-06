@@ -8,6 +8,5 @@ router.get("/", getLicenses)
 router.get("/:id", getLicenseByID)
 router.put("/:id", updateLicense)
 router.delete("/:id", deleteLicense)
-// router.post("/signup", validateCreateSignUp, signUp)
 
 module.exports = router

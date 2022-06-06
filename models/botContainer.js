@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const BotContainerSchema = new mongoose.Schema(
     {
         ip: {type: String, maxlength: 45, unique: true, required: true},
-        typeBot: {type: String, maxlength: 45},
+        typeBot: {type: String, maxlength: 45, required: true},
         descriptionBot: {type: String, maxlength: 100},
         latBot: {type: String, maxlength: 10},
         lonBot: {type: String, maxlength: 10},

@@ -5,9 +5,6 @@ const validateCreateHeadquarter = [
     check('nameHeadquarter', 'El campo es requerido')
     .exists()
     .notEmpty(),
-    check('telephoneNumber', 'El campo es requerido')
-    .exists()
-    .notEmpty(),
     check('company_idCompany', 'El campo es requerido')
     .exists()
     .notEmpty(),

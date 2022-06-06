@@ -3,6 +3,7 @@ const permissionsModels = require('../models/permissions');
 
 // create userType
 const createUserType = async (req, res) => {
+    let newArray=[]
     const { nameUserType, descriptionUserType, permissionsArray } = req.body;
     try {
         for (let index = 0; index < permissionsArray.length; index++) {
@@ -13,7 +14,14 @@ const createUserType = async (req, res) => {
               message: `El permiso_id ${permissionsArray[index]} no existe`
             });
           }
-          
+          let i = newArray.indexOf(permissionsArray[index])
+          if (i !== -1) {
+            return res.status(403).send({
+                success: false,
+                message: `El permiso_id ${permissionsArray[index]} ya existe en el array`
+              });
+          }
+          newArray.push(permissionsArray[index])
         }
       } catch (error) {
         return res.status(400).send({
@@ -30,7 +38,7 @@ const createUserType = async (req, res) => {
             });
         }
         const newUserType = new userTypeModels({
-            nameUserType, descriptionUserType, permissionsArray
+            nameUserType, descriptionUserType, permissionsArray: newArray
         })
         await newUserType.save()
         return res.status(200).send({
@@ -99,7 +107,7 @@ const getUserTypeByID = async (req, res) => {
 
 // update userType
 const updateUserType = async (req, res) => {
-    const { nameUserType, descriptionUserType } = req.body;
+    const { nameUserType, descriptionUserType, permissionsArray } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -121,6 +129,28 @@ const updateUserType = async (req, res) => {
         if (descriptionUserType != undefined) {
             dataUserT.descriptionUserType=descriptionUserType
         }
+        if (permissionsArray != undefined) {
+            try {
+              for (let index = 0; index < permissionsArray.length; index++) {
+                const dataUserP = await permissionsModels.findOne({_id: permissionsArray[index]})
+                if (!dataUserP) {
+                  return res.status(403).send({
+                    success: false,
+                    message: `El permiso_id ${permissionsArray[index]} no existe`
+                  });
+                }
+                let i = dataUserT.permissionsArray.indexOf(permissionsArray[index])
+                if (i === -1) {
+                    dataUserT.permissionsArray=dataUserT.permissionsArray.concat(permissionsArray[index])
+                  }
+              }
+            } catch (error) {
+              return res.status(400).send({
+                  success: false,
+                  message: error.message  
+              });
+            }
+          }
         await dataUserT.save()
         return res.status(200).send({
             success: true,

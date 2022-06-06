@@ -5,6 +5,9 @@ const validateCreateCompany = [
     check('nameCompany', 'El campo es requerido')
     .exists()
     .notEmpty(),
+    check('botContainerArray', 'El campo es de tipo Array')
+    .exists()
+    .isArray(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

@@ -1,15 +1,8 @@
 const licencesModels = require('../models/licenses');
-const headquartersModels = require('../models/headquarters');
-// initialDateLicense
-// finishedDateLicense
-// nameLicense
-// descriptionLicense
 
 // create license
 const createLicense = async (req, res) => {
-    const { initialDateLicense, nameLicense, descriptionLicense } = req.body;
-    var currentDateInitial = new Date(initialDateLicense);
-    var currentDateFinished = new Date(initialDateLicense);
+    const { nameLicense, descriptionLicense } = req.body;
     try {
         const datalicense = await licencesModels.findOne({nameLicense})
         if (datalicense) {
@@ -18,13 +11,8 @@ const createLicense = async (req, res) => {
                 message: "La licencia ya existe"
             });
         }
-        currentDateFinished.setMonth(currentDateFinished.getMonth()+1)
-        console.log(currentDateInitial);
-        console.log(currentDateFinished);
         
         const newLicense = new licencesModels({
-            initialDateLicense: currentDateInitial, 
-            finishedDateLicense: currentDateFinished, 
             nameLicense, 
             descriptionLicense
         })

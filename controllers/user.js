@@ -1,6 +1,7 @@
 const { encrypt, compare } = require('../utils/handleBcrypt')
 const userModels = require('../models/user');
 const userAdminModels = require('../models/userAdmin');
+const superUserModels = require('../models/grantFullAdmin');
 const userTypeModels = require('../models/userType');
 const headquartersModels = require('../models/headquarters');
 const modelModels = require('../models/models');
@@ -10,10 +11,11 @@ const jwt = require('jsonwebtoken');
 const signIn = async (req, res) => {
     const { email, password } = req.body;
     let user = null
-    const dataUser = await userModels.findOne({email}).populate({path: 'userTypeArray'})
+    const dataUser = await userModels.findOne({email})
     const dataUserAdmin = await userAdminModels.findOne({email})
-    if (dataUser || dataUserAdmin) {
-      user=dataUser || dataUserAdmin
+    const dataSuperU = await superUserModels.findOne({email})
+    if (dataUser || dataUserAdmin || dataSuperU) {
+      user=dataUser || dataUserAdmin || dataSuperU
     }else{
       return res.status(404).send({
         success: false,
@@ -108,6 +110,58 @@ const signUp = async (req, res) => {
       });
     }
 }
+
+// get Type User By Token
+
+const getTypeUserByToken = async (req, res) => {
+  const token = req.headers.authorization.split(' ').pop();
+  try {
+    const payload = jwt.verify(token, process.env.KEY_JWT)
+    const id = payload._id
+    
+    let user = null;
+    
+    const dataUser = await userModels.findOne({_id: id})
+    const dataUserAdmin = await userAdminModels.findOne({_id: id})
+    const dataSuperU = await superUserModels.findOne({_id: id})
+
+    if (dataUser || dataUserAdmin || dataSuperU) {
+      user=dataUser || dataUserAdmin || dataSuperU
+    }else{
+      return res.status(404).send({
+        success: false,
+        message: "El usuario no existe"
+      });
+    }
+
+    if (user.userTypeArray) {
+      return res.status(200).send({
+        success: true,
+        message: 'Tipo de usuario encontrado exitosamente',
+        user: true
+      });
+    }
+    if (user.company_idCompany) {
+      return res.status(200).send({
+        success: true,
+        message: 'Tipo de usuario encontrado exitosamente',
+        userAdmin: true
+      });
+    }
+    if (user.ipFrom) {
+      return res.status(200).send({
+        success: true,
+        message: 'Tipo de usuario encontrado exitosamente',
+        superUser: true
+      });
+    }
+  } catch (error) {
+    return res.status(403).send({
+        success: false,
+        message: error.message
+    });
+  }
+} 
 
 // get user by id
 const GetUserByID = async (req, res) => {
@@ -440,4 +494,4 @@ const tokenKillBot = async (req, res) => {
     });
   }
 }
-module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenKillBot, tokenBot};
+module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};

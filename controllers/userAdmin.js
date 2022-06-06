@@ -32,7 +32,7 @@ const signIn = async (req, res) => {
 // register
 const signUp = async (req, res) => {
   
-  const { name, user, email, password, isConfigFull, company_idCompany } = req.body;
+  const { name, user, email, password, company_idCompany } = req.body;
   try {
       const dataUserAdmin = await userAdminModels.findOne({email})
       if (dataUserAdmin) {
@@ -60,7 +60,6 @@ const signUp = async (req, res) => {
           name,
           user,
           email,
-          isConfigFull,
           password: passwordHash,
           company_idCompany
       });
@@ -101,6 +100,36 @@ const GetUserAdminByID = async (req, res) => {
     return res.status(200).send({
       success: true,
       message: "Usuario admin traido correctamente.",
+      dataUser
+  });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+  });
+  }
+}
+
+// get userAdmin by company
+const GetUserAdminByCompany = async (req, res) => {
+  const { id } = req.params
+  if (id === ':id') {
+      return res.status(400).send({
+          success: false,
+          message: "id es requerido"
+      });
+  }
+  try {
+    const dataUser = await userAdminModels.find({company_idCompany: id})
+    if (!dataUser) {
+        return res.status(400).send({
+            success: false,
+            message: "Usuarios admin no encontrado"
+        });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Usuarios admin traido correctamente.",
       dataUser
   });
   } catch (error) {
@@ -199,7 +228,7 @@ const deleteUserAdmin = async (req, res) => {
 // update userAdmin
 const updateUserAdmin = async (req, res) => {
   const { id } = req.params
-  const { name, username, email, password, isConfigFull, company_idCompany } = req.body;
+  const { name, username, email, password, company_idCompany } = req.body;
   if (id === ':id') {
       return res.status(400).send({
           success: false,
@@ -226,9 +255,6 @@ const updateUserAdmin = async (req, res) => {
       if (password != undefined) {
         dataUser.password=password
       }
-      if (isConfigFull != undefined) {
-        dataUser.isConfigFull=isConfigFull
-      }
       if (company_idCompany != undefined) {
       const dataComp = await companyModels.findOne({_id: company_idCompany})
       if (!dataComp) {
@@ -252,4 +278,4 @@ const updateUserAdmin = async (req, res) => {
   }
 }
 
-module.exports = {signIn, signUp, GetUserAdminByID, GetUserAdminByEmail, getMe, deleteUserAdmin, updateUserAdmin};
+module.exports = {signIn, signUp, GetUserAdminByID, GetUserAdminByEmail, getMe, deleteUserAdmin, GetUserAdminByCompany, updateUserAdmin};

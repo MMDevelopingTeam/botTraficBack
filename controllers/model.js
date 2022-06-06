@@ -1,9 +1,10 @@
 const modelModels = require('../models/models');
 const headquartersModels = require('../models/headquarters');
+const platformModels = require('../models/platform');
 
 // create model
 const createModel = async (req, res) => {
-    const { nickname, platform, isAllowed, isActive, headquarters_idHeadquarter } = req.body;
+    const { nickname, isAllowed, isActive, platforms_idPlatform, headquarters_idHeadquarter } = req.body;
     try {
         const dataModel = await modelModels.findOne({nickname})
         if (dataModel) {
@@ -12,7 +13,15 @@ const createModel = async (req, res) => {
                 message: "La modelo ya existe"
             });
         }
-        const dataHeadquarters = await headquartersModels.findOne({headquarters_idHeadquarter})
+
+        const dataPlatform = await platformModels.findOne({_id: platforms_idPlatform})
+        if (!dataPlatform) {
+            return res.status(403).send({
+                success: false,
+                message: "Plataforma no encontrada"
+            });
+        }
+        const dataHeadquarters = await headquartersModels.findOne({_id: headquarters_idHeadquarter})
         if (!dataHeadquarters) {
             return res.status(403).send({
                 success: false,
@@ -21,9 +30,9 @@ const createModel = async (req, res) => {
         }
         const newModel = new modelModels({
             nickname, 
-            platform, 
             isAllowed, 
-            isActive, 
+            isActive,
+            platforms_idPlatform,
             headquarters_idHeadquarter
         })
         await newModel.save()
@@ -121,9 +130,41 @@ const getModelByIDheadQ = async (req, res) => {
     }
 }
 
+// get by id platform model
+const getModelByIDPlatform = async (req, res) => {
+    const { id } = req.params
+    const { nickname } = req.body
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    try {
+        const dataModel = await modelModels.findOne({platforms_idPlatform: id, nickname})
+        if (!dataModel) {
+            return res.status(400).send({
+                success: false,
+                message: "modelo no encontrada"
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "modelos traidas correctamente.",
+            dataModel
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
+
 // update model
 const updateModel = async (req, res) => {
-    const { nickname, platform, isAllowed, isActive, headquarters_idHeadquarter } = req.body;
+    const { nickname, isAllowed, isActive, platforms_idPlatform, headquarters_idHeadquarter } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -142,14 +183,14 @@ const updateModel = async (req, res) => {
         if (nickname != undefined) {
             dataModel.nickname=nickname
         }
-        if (platform != undefined) {
-            dataModel.platform=platform
-        }
         if (isAllowed != undefined) {
             dataModel.isAllowed=isAllowed
         }
         if (isActive != undefined) {
             dataModel.isActive=isActive
+        }
+        if (platforms_idPlatform != undefined) {
+            dataModel.platforms_idPlatform=platforms_idPlatform
         }
         if (headquarters_idHeadquarter != undefined) {
             dataModel.headquarters_idHeadquarter=headquarters_idHeadquarter
@@ -198,4 +239,4 @@ const deleteModel = async (req, res) => {
 }
 
 
-module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, updateModel, deleteModel};
+module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, getModelByIDPlatform, updateModel, deleteModel};
