@@ -5,6 +5,15 @@ const validateCreateLicense = [
     check('nameLicense', 'El campo es requerido')
     .exists()
     .notEmpty(),
+    check('monthsDuration', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('platform_idPlatform', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('numberAccts', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
     (req, res, next) => {
         validateResult(req, res, next)
     }

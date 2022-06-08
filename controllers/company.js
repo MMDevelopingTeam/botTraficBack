@@ -1,61 +1,11 @@
 const companyModels = require('../models/company');
 const registerLicensesModels = require('../models/registerLicenses');
+const licensesModels = require('../models/licenses');
 const botContainerModels = require('../models/botContainer');
-const parseId = require('../utils/parser');
 
 // create company
 const createCompany = async (req, res) => {
-    let newArrayL=[]
-    let newArray=[]
-    const { nameCompany, typeCompany, addressCompany, telephoneCompany,  logo, isConfigFull, registerLicensesArray, botContainerArray } = req.body;
-    try {
-        for (let index = 0; index < registerLicensesArray.length; index++) {
-          const dataL = await registerLicensesModels.findOne({_id: registerLicensesArray[index]})
-          if (!dataL) {
-            return res.status(403).send({
-              success: false,
-              message: `La licencia_id ${registerLicensesArray[index]} no existe`
-            });
-          }
-          let i = newArrayL.indexOf(registerLicensesArray[index])
-          if (i !== -1) {
-            return res.status(403).send({
-                success: false,
-                message: `La licencia_id ${registerLicensesArray[index]} ya existe en el array`
-              });
-          }
-          newArrayL.push(registerLicensesArray[index])
-        }
-    } catch (error) {
-        return res.status(400).send({
-            success: false,
-            message: error.message
-        });
-    }
-    try {
-        for (let index = 0; index < botContainerArray.length; index++) {
-          const dataL = await botContainerModels.findOne({_id: botContainerArray[index]})
-          if (!dataL) {
-            return res.status(403).send({
-              success: false,
-              message: `El botContainer_id ${botContainerArray[index]} no existe`
-            });
-          }
-          let i = newArray.indexOf(botContainerArray[index])
-          if (i !== -1) {
-            return res.status(403).send({
-                success: false,
-                message: `El botContainer_id ${botContainerArray[index]} ya existe en el array`
-              });
-          }
-          newArray.push(botContainerArray[index])
-        }
-    } catch (error) {
-        return res.status(400).send({
-            success: false,
-            message: error.message
-        });
-    }
+    const { nameCompany, typeCompany, addressCompany, telephoneCompany,  logo, isConfigFull, registerLicensesArray, license_idLicense, botContainerArray } = req.body;
     try {
         const dataCompany = await companyModels.findOne({nameCompany})
         if (dataCompany) {
@@ -64,16 +14,33 @@ const createCompany = async (req, res) => {
                 message: "La compañia ya existe."
             });
         }
-        // if (botContainerArray.length === 0) {
-        //     return res.status(400).send({
-        //         success: false,
-        //         message: "Añade almenos una botContainer."
-        //     });
-        // }
+        const dataL = await licensesModels.findOne({_id: license_idLicense})
+        if (!dataL) {
+            return res.status(403).send({
+                success: false,
+                message: "Licencia no encontrada"
+            });
+        }
+        
+        const dateI = new Date()
+        const dateF = new Date()
+        dateF.setMonth(dateF.getMonth()+parseInt(dataL.monthsDuration))
+
         const newCompany = new companyModels({
-            nameCompany, typeCompany, addressCompany, telephoneCompany, logo, isConfigFull, registerLicensesArray: newArrayL, botContainerArray: newArray
+            nameCompany, typeCompany, addressCompany, telephoneCompany, logo, isConfigFull, registerLicensesArray, botContainerArray
         })
         const newComp = await newCompany.save()
+        const newRegLicense = new registerLicensesModels({
+            initialDateLicense: dateI,
+            finishedDateLicense: dateF,
+            monthsDuration: dataL.monthsDuration,
+            licenses_idLicense: dataL._id,
+            companys_idCompany: newComp._id
+        })
+        const dataReg = await newRegLicense.save()
+        const dataC = await companyModels.findOne({_id: newComp._id})
+        dataC.registerLicensesArray = dataC.registerLicensesArray.concat(dataReg._id)
+        await dataC.save();
         return res.status(200).send({
             success: true,
             message: "Compañia creado correctamente.",

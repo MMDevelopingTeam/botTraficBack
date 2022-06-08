@@ -1,20 +1,20 @@
 const licencesModels = require('../models/licenses');
+const platformModels = require('../models/platform');
 
 // create license
 const createLicense = async (req, res) => {
-    const { nameLicense, descriptionLicense } = req.body;
+    const { nameLicense, descriptionLicense , monthsDuration, platform_idPlatform, numberAccts } = req.body;
     try {
-        const datalicense = await licencesModels.findOne({nameLicense})
-        if (datalicense) {
+        const dataP = await platformModels.findOne({_id: platform_idPlatform})
+        if (!dataP) {
             return res.status(403).send({
                 success: false,
-                message: "La licencia ya existe"
+                message: "Plataforma no encontrada"
             });
         }
         
         const newLicense = new licencesModels({
-            nameLicense, 
-            descriptionLicense
+            nameLicense, descriptionLicense, monthsDuration, platform_idPlatform, numberAccts
         })
         await newLicense.save()
         return res.status(200).send({
@@ -83,7 +83,7 @@ const getLicenseByID = async (req, res) => {
 
 // update license
 const updateLicense = async (req, res) => {
-    const { nameLicense, descriptionLicense } = req.body;
+    const { nameLicense, descriptionLicense , monthsDuration, platform_idPlatform, numberAccts } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -104,6 +104,22 @@ const updateLicense = async (req, res) => {
         }
         if (descriptionLicense != undefined) {
             dataLicense.descriptionLicense=descriptionLicense
+        }
+        if (monthsDuration != undefined) {
+            dataLicense.monthsDuration=monthsDuration
+        }
+        if (platform_idPlatform != undefined) {
+            const dataP = await platformModels.findOne({_id: platform_idPlatform})
+            if (!dataP) {
+                return res.status(403).send({
+                    success: false,
+                    message: "Plataforma no encontrada"
+                });
+            }
+            dataLicense.platform_idPlatform=platform_idPlatform
+        }
+        if (numberAccts != undefined) {
+            dataLicense.numberAccts=numberAccts
         }
         await dataLicense.save()
         return res.status(200).send({

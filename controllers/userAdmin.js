@@ -140,6 +140,35 @@ const GetUserAdminByCompany = async (req, res) => {
   }
 }
 
+// reset password
+
+const resetPassword = async (req, res) => {
+
+  const { id } = req.params
+  if (id === ':id') {
+      return res.status(400).send({
+          success: false,
+          message: "id es requerido"
+      });
+  }
+
+  const password = '123456'
+  const passwordHash = await encrypt(password)
+  const dataU = await userAdminModels.findOne({_id: id})
+  if (!dataU) {
+    return res.status(403).send({
+      success: false,
+      message: 'Usuario no encontrado'
+    });
+  }
+  dataU.password=passwordHash
+  await dataU.save();
+  return res.status(200).send({
+    success: true,
+    message: 'Password actualizado exitosamente'
+  });
+}
+
 // get by user token
 const getMe = async (req, res) => {
 
@@ -278,4 +307,4 @@ const updateUserAdmin = async (req, res) => {
   }
 }
 
-module.exports = {signIn, signUp, GetUserAdminByID, GetUserAdminByEmail, getMe, deleteUserAdmin, GetUserAdminByCompany, updateUserAdmin};
+module.exports = {signIn, signUp, GetUserAdminByID, resetPassword, GetUserAdminByEmail, getMe, deleteUserAdmin, GetUserAdminByCompany, updateUserAdmin};
