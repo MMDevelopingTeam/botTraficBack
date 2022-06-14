@@ -1,6 +1,8 @@
 const modelModels = require('../models/models');
 const headquartersModels = require('../models/headquarters');
 const platformModels = require('../models/platform');
+const botContainerModels = require('../models/botContainer');
+const axios = require('axios');
 
 // create model
 const createModel = async (req, res) => {
@@ -130,6 +132,32 @@ const getModelByIDheadQ = async (req, res) => {
     }
 }
 
+// get killbots by model
+const getKillbotsByModel = async (req, res) => {
+
+    const {nameModel} = req.body
+    if (!nameModel) {
+        return res.status(400).send({
+            success: false,
+            message: "nameModel es requerido"
+        });
+    }
+
+    let acctsModelsLength=0
+
+    const dataB = await botContainerModels.find({isActive: true})
+    for (let index = 0; index < dataB.length; index++) {
+        let url = `http://${dataB[index].ip}:3000/api/storage/getKillBotsByModel`;
+        const dataK = await axios.post(url, {nameModel})
+        acctsModelsLength=acctsModelsLength+dataK.data.acctsModelsLength
+    }
+    return res.status(200).send({
+        success: true,
+        message: "killsBots encontrados exitosamente",
+        acctsModelsLength
+    });
+}
+
 // get by id platform model
 const getModelByIDPlatform = async (req, res) => {
     const { id } = req.params
@@ -239,4 +267,4 @@ const deleteModel = async (req, res) => {
 }
 
 
-module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, getModelByIDPlatform, updateModel, deleteModel};
+module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, getModelByIDPlatform, getKillbotsByModel, updateModel, deleteModel};

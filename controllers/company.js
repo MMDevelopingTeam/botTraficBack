@@ -5,7 +5,7 @@ const botContainerModels = require('../models/botContainer');
 
 // create company
 const createCompany = async (req, res) => {
-    const { nameCompany, typeCompany, addressCompany, telephoneCompany,  logo, isConfigFull, registerLicensesArray, license_idLicense, botContainerArray } = req.body;
+    const { nameCompany, typeCompany, addressCompany, telephoneCompany,  logo, isConfigFull, registerLicensesArray, license_idLicense } = req.body;
     try {
         const dataCompany = await companyModels.findOne({nameCompany})
         if (dataCompany) {
@@ -21,13 +21,24 @@ const createCompany = async (req, res) => {
                 message: "Licencia no encontrada"
             });
         }
-        
         const dateI = new Date()
         const dateF = new Date()
         dateF.setMonth(dateF.getMonth()+parseInt(dataL.monthsDuration))
 
+        let acctFree=null
+        const dataBotContainers = await botContainerModels.find()
+        for (let index = 0; index < dataBotContainers.length; index++) {
+            acctFree=acctFree+dataBotContainers[index].accountsFree
+        }
+        if (acctFree < dataL.numberAccts) {
+            return res.status(404).send({
+                success: false,
+                message: "Cuentas de los bots insuficientes"
+            });
+        }
+
         const newCompany = new companyModels({
-            nameCompany, typeCompany, addressCompany, telephoneCompany, logo, isConfigFull, registerLicensesArray, botContainerArray
+            nameCompany, typeCompany, addressCompany, telephoneCompany, logo, isConfigFull, registerLicensesArray
         })
         const newComp = await newCompany.save()
         const newRegLicense = new registerLicensesModels({
@@ -41,6 +52,40 @@ const createCompany = async (req, res) => {
         const dataC = await companyModels.findOne({_id: newComp._id})
         dataC.registerLicensesArray = dataC.registerLicensesArray.concat(dataReg._id)
         await dataC.save();
+
+        let acctRest=dataL.numberAccts
+
+        for (let index = 0; index < dataBotContainers.length; index++) {
+            if (dataBotContainers[index].accountsFree === 0) {
+                continue
+            }
+            if (dataBotContainers[index].accountsFree > acctRest) {
+                const dataB = await botContainerModels.findOne({_id:dataBotContainers[index]._id})
+                const data = {
+                    id: newComp._id,
+                    AcctsUsed: parseInt(acctRest),
+                    AcctsFree: parseInt(acctRest)
+                }
+                dataB.CompnaysArray=dataB.CompnaysArray.concat(data)
+                dataB.accountsFree=dataBotContainers[index].accountsFree-acctRest
+                console.log("aaaaaa", index);
+                await dataB.save()
+                break;
+            }
+            if (dataBotContainers[index].accountsFree < acctRest) {
+                acctRest=acctRest-dataBotContainers[index].accountsFree
+                const dataB = await botContainerModels.findOne({_id:dataBotContainers[index]._id})
+                const data = {
+                    id: newComp._id,
+                    AcctsUsed: parseInt(dataBotContainers[index].accountsFree),
+                    AcctsFree: parseInt(dataBotContainers[index].accountsFree)
+                }
+                dataB.CompnaysArray=dataB.CompnaysArray.concat(data)
+                dataB.accountsFree=0
+                console.log("bbbbb",index);
+                await dataB.save()
+            }
+        }
         return res.status(200).send({
             success: true,
             message: "Compañia creado correctamente.",

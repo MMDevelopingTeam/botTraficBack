@@ -10,7 +10,11 @@ const BotContainerSchema = new mongoose.Schema(
         addressBot: {type: String, maxlength: 45},
         averageDownloadSpeed: {type: String, maxlength: 45},
         averageUploadSpeed: {type: String, maxlength: 45},
-        isp: {type: String, maxlength: 90}
+        accountsAll: {type: Number, maxlength: 90},
+        accountsFree: {type: Number, default: 0, maxlength: 90},
+        isp: {type: String, maxlength: 90},
+        isActive: {type: Boolean, default: true},
+        CompnaysArray: {type: Array, default: [], ref: 'BotContainer'},
     }
 )
 

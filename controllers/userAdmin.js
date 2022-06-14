@@ -257,7 +257,7 @@ const deleteUserAdmin = async (req, res) => {
 // update userAdmin
 const updateUserAdmin = async (req, res) => {
   const { id } = req.params
-  const { name, username, email, password, company_idCompany } = req.body;
+  const { name, user, email, company_idCompany } = req.body;
   if (id === ':id') {
       return res.status(400).send({
           success: false,
@@ -275,14 +275,11 @@ const updateUserAdmin = async (req, res) => {
       if (name != undefined) {
         dataUser.name=name
       }
-      if (username != undefined) {
-        dataUser.username=username
+      if (user != undefined) {
+        dataUser.user=user
       }
       if (email != undefined) {
         dataUser.email=email
-      }
-      if (password != undefined) {
-        dataUser.password=password
       }
       if (company_idCompany != undefined) {
       const dataComp = await companyModels.findOne({_id: company_idCompany})

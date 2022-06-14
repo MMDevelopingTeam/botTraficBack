@@ -4,8 +4,11 @@ const userAdminModels = require('../models/userAdmin');
 const superUserModels = require('../models/grantFullAdmin');
 const userTypeModels = require('../models/userType');
 const headquartersModels = require('../models/headquarters');
+const registerLicensesModels = require('../models/registerLicenses');
+const botContainerModels = require('../models/botContainer');
 const modelModels = require('../models/models');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 // login
 const signIn = async (req, res) => {
@@ -424,19 +427,122 @@ const tokenBot = async (req, res) => {
       message: "Sede no encontrada."
     });
   }
-  try {
-    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots}, process.env.KEY_JWT)
-    return res.status(200).send({
-      success: true,
-      message: "Token creado correctamente",
-      token
-    });
-  } catch (error) {
+  const dataReg = await registerLicensesModels.findOne({companys_idCompany: dataHeadQ.company_idCompany})
+
+ 
+  let botsRes = nBots;
+  let botsDisponibles=null;
+
+  const dataBot = await botContainerModels.find(({isActive: true}))
+
+  if (dataBot.length === 0) {
     return res.status(400).send({
       success: false,
-      message: error.message
+      message: `No hay botContainers activos`
     });
   }
+
+  for (let index = 0; index < dataBot.length; index++) {
+    dataBot[index].CompnaysArray.map((data) => {
+      if (String(data.id) === String(dataHeadQ.company_idCompany)) {
+        botsDisponibles=botsDisponibles+data.AcctsFree
+      }
+    })
+  }
+  for (let index = 0; index < dataBot.length; index++) {
+    let newArray=[]
+    dataBot[index].CompnaysArray.map((data) => {
+      newArray.push(String(data.id))
+    })
+    let i = newArray.indexOf(String(dataHeadQ.company_idCompany))
+
+    if (i != -1) {
+      if (botsRes > botsDisponibles || botsRes > dataReg.licenses_idLicense.numberAccts) {
+        return res.status(400).send({
+          success: false,
+          message: `No puedes lanzar ${botsRes} bots`
+        }); 
+      }
+      if (dataBot[index].CompnaysArray[i].AcctsUsed > botsRes) {
+        let url = `http://${dataBot[index].ip}:3000/api/bot`;
+        const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots: botsRes}, process.env.KEY_JWT)
+        axios.post(url, {token})
+        .then(function (response) {
+          if (response.data.success === true) {
+            console.log("object", index);
+            let datosBot=dataBot[index]
+            datosBot.CompnaysArray[i].AcctsFree=parseInt(datosBot.CompnaysArray[i].AcctsUsed)-parseInt(botsRes)
+            botContainerModels.findOneAndUpdate(
+              {_id: dataBot[index]._id},
+              { $set: datosBot},
+              (err, doc) => {
+                if (err) {
+                  console.log(err);
+                }
+              }
+            )
+            // res.status(200).send({
+            //   success: true,
+            //   message: response.data.message,
+            // });
+          }
+        })
+        .catch(function (error) {
+          return console.log(error.message);
+        });
+        break;
+      }
+      if (dataBot[index].CompnaysArray[i].AcctsUsed < botsRes) {
+        botsRes=botsRes-dataBot[index].CompnaysArray[i].AcctsUsed
+        let url = `http://${dataBot[index].ip}:3000/api/bot`;
+        const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots: dataBot[index].CompnaysArray[i].AcctsUsed}, process.env.KEY_JWT)
+        axios.post(url, {token})
+        .then(function (response) {
+          if (response.data.success === true) {
+            console.log("object2", index);
+            let datosBot=dataBot[index]
+            datosBot.CompnaysArray[i].AcctsFree=0
+            botContainerModels.findOneAndUpdate(
+              {_id: dataBot[index]._id},
+              { $set: datosBot},
+              (err, doc) => {
+                if (err) {
+                  console.log(err);
+                }
+              }
+            )
+            // res.status(200).send({
+            //   success: true,
+            //   message: response.data.message,
+            // });
+          }
+        })
+        .catch(function (error) {
+          return console.log(error.message);
+        });
+      }
+    }
+  }
+
+  // return res.status(200).send({
+  //   success: true,
+  //   message: "Token creado correctamente",
+  //   token
+  // });
+  // return console.log(String(dataHeadQ.company_idCompany));
+  // try {
+  //   const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots}, process.env.KEY_JWT)
+  //   return res.status(200).send({
+  //     success: true,
+  //     message: "Token creado correctamente",
+  //     token
+  //   });
+  // } catch (error) {
+  //   return res.status(400).send({
+  //     success: false,
+  //     message: error.message
+  //   });
+  // }
 }
 
 // get token killBot
@@ -480,18 +586,111 @@ const tokenKillBot = async (req, res) => {
       message: "Sede no encontrada."
     });
   }
-  try {
-    const token = jwt.sign({nameModel, userId, nBots}, process.env.KEY_JWT)
-    return res.status(200).send({
-      success: true,
-      message: "Token creado correctamente",
-      token
-    });
-  } catch (error) {
+
+  let lengthAllKillsBots=0
+  let botsRestatnes=nBots
+  const dataBot = await botContainerModels.find({isActive: true})
+
+  if (dataBot.length === 0) {
     return res.status(400).send({
       success: false,
-      message: error.message
+      message: `No hay botContainers activos`
     });
   }
+
+  for (let index = 0; index < dataBot.length; index++) {
+    let url = `http://${dataBot[index].ip}:3000/api/storage/getKillBotsByModel`;
+    const dataK = await axios.post(url, {nameModel})
+    lengthAllKillsBots=lengthAllKillsBots+dataK.data.acctsModelsLength
+  }
+  
+  if (nBots > lengthAllKillsBots) {
+    return res.status(400).send({
+      success: false,
+      message: `No es posible matar ${nBots} bots`
+    });
+  }
+
+  for (let index = 0; index < dataBot.length; index++) {
+    let newArray=[]
+    dataBot[index].CompnaysArray.map((data) => {
+      newArray.push(String(data.id))
+    })
+    let i = newArray.indexOf(String(dataHeadQ.company_idCompany))
+
+    let urlModel = `http://${dataBot[index].ip}:3000/api/storage/getKillBotsByModel`;
+    const dataM = await axios.post(urlModel, {nameModel})
+    if (dataM.data.acctsModelsLength === 0) {
+      console.log("No hay killbots en el botcontainer");
+      continue;
+    }
+    if (botsRestatnes > dataM.data.acctsModelsLength) {
+      botsRestatnes=botsRestatnes-dataM.data.acctsModelsLength
+      let url = `http://${dataBot[index].ip}:3000/api/bot/killbot`;
+      const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots: dataM.data.acctsModelsLength}, process.env.KEY_JWT)
+      axios.post(url, {token})
+      .then(function (response) {
+        if (response.data.message === 'bot killer') {
+          console.log(response.data.message);
+        }
+        let datosBot=dataBot[index]
+        datosBot.CompnaysArray[i].AcctsFree=parseInt(datosBot.CompnaysArray[i].AcctsUsed)
+        botContainerModels.findOneAndUpdate(
+          {_id: dataBot[index]._id},
+          { $set: datosBot},
+          (err, doc) => {
+            if (err) {
+              console.log(err);
+            }
+          }
+        )
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    if (botsRestatnes <= dataM.data.acctsModelsLength) {
+      let url = `http://${dataBot[index].ip}:3000/api/bot/killbot`;
+      const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots: botsRestatnes}, process.env.KEY_JWT)
+      axios.post(url, {token})
+      .then(function (response) {
+        if (response.data.message === 'bot killer') {
+          console.log(response.data.message);
+        }
+        let datosBot=dataBot[index]
+        datosBot.CompnaysArray[i].AcctsFree=parseInt(datosBot.CompnaysArray[i].AcctsFree)+parseInt(botsRestatnes)
+        botContainerModels.findOneAndUpdate(
+          {_id: dataBot[index]._id},
+          { $set: datosBot},
+          (err, doc) => {
+            if (err) {
+              console.log(err);
+            }
+          }
+        )
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  }
+
+
+
+// return  
+
+//   try {
+//     const token = jwt.sign({nameModel, userId, nBots}, process.env.KEY_JWT)
+//     return res.status(200).send({
+//       success: true,
+//       message: "Token creado correctamente",
+//       token
+//     });
+//   } catch (error) {
+//     return res.status(400).send({
+//       success: false,
+//       message: error.message
+//     });
+//   }
 }
 module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};

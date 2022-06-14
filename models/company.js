@@ -8,8 +8,7 @@ const CompanySchema = new mongoose.Schema(
         telephoneCompany: {type: String, maxlength:25},
         logo: {type: String, maxlength:100},
         isConfigFull: {type: Boolean, default: false},
-        registerLicensesArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'RegisterLicenses', autopopulate: true}],
-        botContainerArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'BotContainer', autopopulate: true}],
+        registerLicensesArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'RegisterLicenses', autopopulate: true}]
     }
 )
 
