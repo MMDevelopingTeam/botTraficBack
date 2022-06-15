@@ -3,12 +3,33 @@ const userModels = require('../models/user');
 
 // create register
 const createRegister = async (req, res) => {
-    const { nameModel, userId, nBots } = req.body;
+    const { nameModel, userId, nBots, killBots } = req.body;
     const dataU = await userModels.findOne({_id: userId})
     if (!dataU) {
         return res.status(400).send({
             success: false,
             message: "Usuario no encontrado"
+        });
+    }
+    const dataM = await tableLogLaunchModels.findOne({nameModel})
+    if (killBots === true) {
+        if (nBots != undefined) {
+            dataM.nBots=parseInt(dataM.nBots)-parseInt(nBots)
+        }
+        await dataM.save()
+        return res.status(200).send({
+            success: true,
+            message: "Registro actualizado correctamente."
+        });
+    }
+    if (dataM) {
+        if (nBots != undefined) {
+            dataM.nBots=parseInt(dataM.nBots)+parseInt(nBots)
+        }
+        await dataM.save()
+        return res.status(200).send({
+            success: true,
+            message: "Registro actualizado correctamente."
         });
     }
     try {
@@ -113,7 +134,7 @@ const getRegisterByIDUser = async (req, res) => {
 
 // update register
 const updateRegister = async (req, res) => {
-    const { nameModel, NBots, user_idUser } = req.body;
+    const { nameModel, userId, nBots } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -132,11 +153,11 @@ const updateRegister = async (req, res) => {
         if (nameModel != undefined) {
             dataPlatfm.nameModel=nameModel
         }
-        if (NBots != undefined) {
-            dataPlatfm.NBots=NBots
+        if (userId != undefined) {
+            dataPlatfm.userId=userId
         }
-        if (user_idUser != undefined) {
-            dataPlatfm.user_idUser=user_idUser
+        if (nBots != undefined) {
+            dataPlatfm.nBots=nBots
         }
         await dataPlatfm.save()
         return res.status(200).send({

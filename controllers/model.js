@@ -147,7 +147,7 @@ const getKillbotsByModel = async (req, res) => {
 
     const dataB = await botContainerModels.find({isActive: true})
     for (let index = 0; index < dataB.length; index++) {
-        let url = `http://${dataB[index].ip}:3000/api/storage/getKillBotsByModel`;
+        let url = `http://localhost:3000/api/storage/getKillBotsByModel`;
         const dataK = await axios.post(url, {nameModel})
         acctsModelsLength=acctsModelsLength+dataK.data.acctsModelsLength
     }
