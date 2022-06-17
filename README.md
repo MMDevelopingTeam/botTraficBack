@@ -1,6 +1,7 @@
 # BotTrafico
 
-para instalar las dependencias corra el siguiente comando
+para instalar las dependencias ejecute el siguiente comando
+
 ```
 npm install
 ```
@@ -17,3 +18,7 @@ crea el archivo .env en la raiz del proyecto, luego configura la siguientes line
 PORT=XXXX
 KEY_JWT=XXXX
 ```
+
+## Versions
+
+nodejs: 14.18.3
