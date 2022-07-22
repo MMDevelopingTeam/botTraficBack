@@ -3,7 +3,7 @@ const platformModels = require('../models/platform');
 
 // create license
 const createLicense = async (req, res) => {
-    const { nameLicense, descriptionLicense , monthsDuration, platform_idPlatform, numberAccts } = req.body;
+    const { nameLicense, descriptionLicense , monthsDuration, type, platform_idPlatform, numberAccts } = req.body;
     try {
         const dataP = await platformModels.findOne({_id: platform_idPlatform})
         if (!dataP) {
@@ -14,7 +14,7 @@ const createLicense = async (req, res) => {
         }
         
         const newLicense = new licencesModels({
-            nameLicense, descriptionLicense, monthsDuration, platform_idPlatform, numberAccts
+            nameLicense, descriptionLicense, monthsDuration, type, platform_idPlatform, numberAccts
         })
         await newLicense.save()
         return res.status(200).send({
@@ -83,7 +83,7 @@ const getLicenseByID = async (req, res) => {
 
 // update license
 const updateLicense = async (req, res) => {
-    const { nameLicense, descriptionLicense , monthsDuration, platform_idPlatform, numberAccts } = req.body;
+    const { nameLicense, descriptionLicense , monthsDuration, type, platform_idPlatform, numberAccts } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -107,6 +107,9 @@ const updateLicense = async (req, res) => {
         }
         if (monthsDuration != undefined) {
             dataLicense.monthsDuration=monthsDuration
+        }
+        if (type != undefined) {
+            dataLicense.type=type
         }
         if (platform_idPlatform != undefined) {
             const dataP = await platformModels.findOne({_id: platform_idPlatform})

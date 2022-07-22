@@ -1,5 +1,6 @@
 const companyModels = require('../models/company');
 const registerLicensesModels = require('../models/registerLicenses');
+const botContainerCompanysModels = require('../models/botContainerCompanys');
 const licensesModels = require('../models/licenses');
 const botContainerModels = require('../models/botContainer');
 
@@ -61,28 +62,32 @@ const createCompany = async (req, res) => {
             }
             if (dataBotContainers[index].accountsFree > acctRest) {
                 const dataB = await botContainerModels.findOne({_id:dataBotContainers[index]._id})
-                const data = {
-                    id: newComp._id,
+                const newRegister = new botContainerCompanysModels({
+                    companys_idCompany: newComp._id,
+                    botContainer_idBotContainer: dataB._id,
+                    registerLicenses: dataReg._id,
                     AcctsUsed: parseInt(acctRest),
                     AcctsFree: parseInt(acctRest)
-                }
-                dataB.CompnaysArray=dataB.CompnaysArray.concat(data)
+                })
+                const saveRegister = await newRegister.save()
+                dataB.CompanysArray=dataB.CompanysArray.concat(saveRegister._id)
                 dataB.accountsFree=dataBotContainers[index].accountsFree-acctRest
-                console.log("aaaaaa", index);
                 await dataB.save()
                 break;
             }
             if (dataBotContainers[index].accountsFree < acctRest) {
                 acctRest=acctRest-dataBotContainers[index].accountsFree
                 const dataB = await botContainerModels.findOne({_id:dataBotContainers[index]._id})
-                const data = {
-                    id: newComp._id,
+                const newRegisterD = new botContainerCompanysModels({
+                    companys_idCompany: newComp._id,
+                    botContainer_idBotContainer: dataB._id,
+                    registerLicenses: dataReg._id,
                     AcctsUsed: parseInt(dataBotContainers[index].accountsFree),
                     AcctsFree: parseInt(dataBotContainers[index].accountsFree)
-                }
-                dataB.CompnaysArray=dataB.CompnaysArray.concat(data)
+                })
+                const saveRegisterD = await newRegisterD.save()
+                dataB.CompanysArray=dataB.CompanysArray.concat(saveRegisterD._id)
                 dataB.accountsFree=0
-                console.log("bbbbb",index);
                 await dataB.save()
             }
         }

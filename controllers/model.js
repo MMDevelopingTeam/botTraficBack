@@ -190,6 +190,31 @@ const getModelByIDPlatform = async (req, res) => {
     }
 }
 
+// get model by id platform, id headQ and nickname 
+const getModelFull = async (req, res) => {
+    const { nickname, platforms_idPlatform, headquarters_idHeadquarter } = req.body
+    try {
+        const dataModel = await modelModels.findOne({nickname, platforms_idPlatform, headquarters_idHeadquarter})
+        if (!dataModel) {
+            return res.status(400).send({
+                success: false,
+                message: "modelo no encontrada"
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "modelo traida correctamente.",
+            dataModel
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
+
 // update model
 const updateModel = async (req, res) => {
     const { nickname, isAllowed, isActive, platforms_idPlatform, headquarters_idHeadquarter } = req.body;
@@ -267,4 +292,4 @@ const deleteModel = async (req, res) => {
 }
 
 
-module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, getModelByIDPlatform, getKillbotsByModel, updateModel, deleteModel};
+module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, getModelFull, getModelByIDPlatform, getKillbotsByModel, updateModel, deleteModel};

@@ -79,6 +79,37 @@ const getPlatformByID = async (req, res) => {
     }
 }
 
+// get by name platform
+const getPlatformByName = async (req, res) => {
+    const { name } = req.params
+    if (name === ':name') {
+        return res.status(400).send({
+            success: false,
+            message: "name es requerido"
+        });
+    }
+    try {
+        const dataPlatfm = await platformModels.findOne({namePlatform: name})
+        if (!dataPlatfm) {
+            return res.status(400).send({
+                success: false,
+                message: "Plataforma no encontrada"
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Plataforma traida correctamente.",
+            dataPlatfm
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
+
 // update platform
 const updatePlatform = async (req, res) => {
     const { namePlatform, urlPlatform } = req.body;
@@ -147,4 +178,4 @@ const deletePlatform = async (req, res) => {
 }
 
 
-module.exports = {createPlatform, getPlatform, getPlatformByID, updatePlatform, deletePlatform};
+module.exports = {createPlatform, getPlatform, getPlatformByID, getPlatformByName, updatePlatform, deletePlatform};

@@ -29,5 +29,19 @@ const validateGetPlatform = [
         validateResult(req, res, next)
     }
 ]
+const validateGetModelFull = [
+    check('nickname', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('platforms_idPlatform', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('headquarters_idHeadquarter', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
 
-module.exports = {validateGetPlatform, validateCreateModel}
+module.exports = {validateGetPlatform, validateCreateModel, validateGetModelFull}

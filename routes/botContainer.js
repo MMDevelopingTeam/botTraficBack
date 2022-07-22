@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { createBotConatiner, getBotConatiner, getBotConatinerByID, updateBotConatiner, deleteBotConatiner, updateBotConatinerByIP, getBotConatinerByIDCompnay, updateBotConatinerArrayComp } = require("../controllers/botContainer");
+const { createBotContainer, getBotContainer, getBotContainerByID, updateBotContainer, deleteBotContainer, updateBotContainerByIP, getBotContainerByIDCompany, updateBotContainerArrayComp, getRegisterCompanyBotContainer } = require("../controllers/botContainer");
 const { validateCreateBotContainer } = require("../validators/botContainer");
 
-router.post("/", validateCreateBotContainer, createBotConatiner)
-router.get("/", getBotConatiner)
-router.get("/:id", getBotConatinerByID)
-router.get("/byIdCompany/:id", getBotConatinerByIDCompnay)
-router.put("/updateByIp/:ip", updateBotConatinerByIP)
-router.put("/updateAccts/:id", updateBotConatinerArrayComp)
-router.put("/:id", updateBotConatiner)
-router.delete("/:id", deleteBotConatiner)
+router.post("/", validateCreateBotContainer, createBotContainer)
+router.get("/", getBotContainer)
+router.get("/:id", getBotContainerByID)
+router.get("/byIdCompany/:id", getBotContainerByIDCompany)
+router.get("/getRegisterCompanyBotContainer/:id", getRegisterCompanyBotContainer)
+router.put("/updateByIp/:ip", updateBotContainerByIP)
+router.put("/updateAccts/:id", updateBotContainerArrayComp)
+router.put("/:id", updateBotContainer)
+router.delete("/:id", deleteBotContainer)
 
 module.exports = router

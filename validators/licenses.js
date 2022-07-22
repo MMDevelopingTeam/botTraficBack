@@ -8,6 +8,9 @@ const validateCreateLicense = [
     check('monthsDuration', 'El campo es requerido')
     .exists()
     .notEmpty(),
+    check('type', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
     check('platform_idPlatform', 'El campo es requerido')
     .exists()
     .notEmpty(),
@@ -36,4 +39,16 @@ const validateCreateRegisterLicense = [
     }
 ]
 
-module.exports = {validateCreateRegisterLicense, validateCreateLicense}
+const validateGetLicencesPlatform = [
+    check('companys_idCompany', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('platforms_idPlatform', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = {validateCreateRegisterLicense, validateCreateLicense, validateGetLicencesPlatform}

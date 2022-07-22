@@ -495,4 +495,5 @@ const tokenKillBot = async (req, res) => {
     });
   }
 }
+
 module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};

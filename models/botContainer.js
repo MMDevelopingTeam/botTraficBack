@@ -14,8 +14,10 @@ const BotContainerSchema = new mongoose.Schema(
         accountsFree: {type: Number, default: 0, maxlength: 90},
         isp: {type: String, maxlength: 90},
         isActive: {type: Boolean, default: true},
-        CompnaysArray: {type: Array, default: [], ref: 'BotContainer'},
+        CompanysArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'botContainerCompanys', autopopulate: true}]
     }
 )
+
+BotContainerSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model('BotContainer', BotContainerSchema)

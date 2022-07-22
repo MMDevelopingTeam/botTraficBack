@@ -1,9 +1,10 @@
 const botContainerModels = require('../models/botContainer');
 const companyModels = require('../models/company');
+const botContainerCompanysModels = require('../models/botContainerCompanys');
 const axios = require('axios');
 
-// create botConatiner
-const createBotConatiner = async (req, res) => {
+// create botContainer
+const createBotContainer = async (req, res) => {
     const { ip, typeBot, descriptionBot, latBot, lonBot, addressBot, averageDownloadSpeed, averageUploadSpeed, isp } = req.body;
     try {
         const dataBotContainer = await botContainerModels.findOne({ip})
@@ -46,14 +47,14 @@ const createBotConatiner = async (req, res) => {
     
 }
 
-// get botConatiner
-const getBotConatiner = async (req, res) => {
+// get botContainer
+const getBotContainer = async (req, res) => {
     try {
         const dataBotContainer = await botContainerModels.find()
         if (dataBotContainer) {
             return res.status(200).send({
                 success: true,
-                message: "BotContainers traidos correctamente.",
+                message: "BotContainers traídos correctamente.",
                 dataBotContainer
             });
         }
@@ -67,8 +68,8 @@ const getBotConatiner = async (req, res) => {
     }
 }
 
-// get by id botConatiner
-const getBotConatinerByID = async (req, res) => {
+// get by id botContainer
+const getBotContainerByID = async (req, res) => {
     const { id } = req.params
     if (id === ':id') {
         return res.status(400).send({
@@ -86,7 +87,7 @@ const getBotConatinerByID = async (req, res) => {
         }
         return res.status(200).send({
             success: true,
-            message: "BotContainer traido correctamente.",
+            message: "BotContainer traído correctamente.",
             dataBotContainer
         });
     } catch (error) {
@@ -98,8 +99,8 @@ const getBotConatinerByID = async (req, res) => {
     }
 }
 
-// get by id botConatiner
-const getBotConatinerByIDCompnay = async (req, res) => {
+// get by id botContainer for id company
+const getBotContainerByIDCompany = async (req, res) => {
     let botContainers = []
     let state=false
     const { id } = req.params
@@ -119,7 +120,7 @@ const getBotConatinerByIDCompnay = async (req, res) => {
         }
         const dataBotContainer = await botContainerModels.find({isActive: true})
         dataBotContainer.map(data => {
-            data.CompnaysArray.map(dataD => {
+            data.CompanysArray.map(dataD => {
                 if (String(dataD.id) === String(id)) {
                     botContainers.push(data)
                 }
@@ -141,7 +142,7 @@ const getBotConatinerByIDCompnay = async (req, res) => {
         }
         return res.status(200).send({
             success: true,
-            message: "BotContainer traido correctamente.",
+            message: "BotContainer traído correctamente.",
             botContainers
         });
     } catch (error) {
@@ -153,8 +154,8 @@ const getBotConatinerByIDCompnay = async (req, res) => {
     }
 }
 
-// update botConatiner
-const updateBotConatiner = async (req, res) => {
+// update botContainer
+const updateBotContainer = async (req, res) => {
     const { ip, typeBot, descriptionBot, latBot, lonBot, addressBot, averageDownloadSpeed, averageUploadSpeed, isp, isActive } = req.body;
     const { id } = req.params;
     if (id === ':id') {
@@ -168,7 +169,7 @@ const updateBotConatiner = async (req, res) => {
         if (!dataBotContainer) {
             return res.status(400).send({
                 success: false,
-                message: "BotContainer no encotrado"
+                message: "BotContainer no encontrado"
             });
         }
         if (ip != undefined) {
@@ -215,10 +216,10 @@ const updateBotConatiner = async (req, res) => {
     }
 }
 
-// update botConatiner ArrayComp
-const updateBotConatinerArrayComp = async (req, res) => {
+// update botContainer ArrayComp
+const updateBotContainerArrayComp = async (req, res) => {
     let state=true
-    const { companys_idCompany, nBots, Launch, Kill } = req.body;
+    const { nBots, Launch, Kill } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -227,60 +228,46 @@ const updateBotConatinerArrayComp = async (req, res) => {
         });
     }
     try {
-        const dataBotContainer = await botContainerModels.findOne({_id: id})
-        if (!dataBotContainer) {
-            return res.status(400).send({
-                success: false,
-                message: "BotContainer no encotrado"
-            });
-        }
-        const dataBotComp = await companyModels.findOne({_id: companys_idCompany})
+        const dataBotComp = await botContainerCompanysModels.findOne({_id: id})
         if (!dataBotComp) {
             return res.status(400).send({
                 success: false,
-                message: "Compañia no encotrada"
+                message: "registro no encotrado"
             });
         }
-        dataBotContainer.CompnaysArray.map(data => {
-            if (String(data.id) === String(companys_idCompany)) {
-                if (Launch === true) {
-                    if (nBots <= data.AcctsFree) {
-                        data.AcctsFree=data.AcctsFree-parseInt(nBots)
-                    }else{
-                        state=false
-                        return console.log("No es posible realizar esta acción");
-                    }
-                }
-                if (Kill === true) {
-                    if (data.AcctsFree+parseInt(nBots) <= data.AcctsUsed) {
-                        data.AcctsFree=data.AcctsFree+parseInt(nBots)
-                    }else{
-                        state=false
-                        return console.log("No es posible realizar esta acción");
-                    }
-                }
-            }
-        })
-        if (!state) return res.status(400).send({
-            success: false,
-            message: "Algo salio mal",
-        });
-        botContainerModels.updateOne({ _id: id }, dataBotContainer,
-        function(error, info) {
-            if (error) {
+        const dataBotContainer = await botContainerModels.findOne({_id: dataBotComp.botContainer_idBotContainer._id})
+        if (!dataBotContainer) {
+            return res.status(400).send({
+                success: false,
+                message: "BotContainer no encontrado"
+            });
+        }
+
+        if (Launch === true) {
+            if (nBots <= dataBotComp.AcctsFree) {
+                dataBotComp.AcctsFree=dataBotComp.AcctsFree-parseInt(nBots)
+            }else{
                 return res.status(400).send({
                     success: false,
-                    message: error.message
-                });
-            } else {
-                return res.status(200).send({
-                    success: true,
-                    message: "BotContainer actualizado correctamente",
+                    message: "No tiene disponible mas bots",
                 });
             }
         }
-        )
-
+        if (Kill === true) {
+            if (dataBotComp.AcctsFree+parseInt(nBots) <= dataBotComp.AcctsUsed) {
+                dataBotComp.AcctsFree=dataBotComp.AcctsFree+parseInt(nBots)
+            }else{
+                return res.status(400).send({
+                    success: false,
+                    message: "No es posible matar bots",
+                });
+            }
+        }
+        dataBotComp.save()
+        return res.status(200).send({
+            success: true,
+            message: "BotContainer actualizado correctamente",
+        });
     } catch (error) {
         return res.status(400).send({
             success: false,
@@ -289,8 +276,8 @@ const updateBotConatinerArrayComp = async (req, res) => {
     }
 }
 
-// update botConatiner
-const updateBotConatinerByIP = async (req, res) => {
+// update botContainer
+const updateBotContainerByIP = async (req, res) => {
     const { typeBot, descriptionBot, latBot, lonBot, addressBot, averageDownloadSpeed, averageUploadSpeed, isp, isActive } = req.body;
     const { ip } = req.params;
     if (ip === ':ip') {
@@ -304,7 +291,7 @@ const updateBotConatinerByIP = async (req, res) => {
         if (!dataBotContainer) {
             return res.status(400).send({
                 success: false,
-                message: "BotContainer no encotrado"
+                message: "BotContainer no encontrado"
             });
         }
         if (typeBot != undefined) {
@@ -349,7 +336,7 @@ const updateBotConatinerByIP = async (req, res) => {
 }
 
 
-const deleteBotConatiner = async (req, res) => {
+const deleteBotContainer = async (req, res) => {
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -362,7 +349,7 @@ const deleteBotConatiner = async (req, res) => {
         if (!dataBotContainer) {
             return res.status(400).send({
                 success: false,
-                message: "userType no encotrado"
+                message: "userType no encontrado"
             });
         }
         await botContainerModels.deleteOne({_id: id})
@@ -378,4 +365,31 @@ const deleteBotConatiner = async (req, res) => {
     }
 }
 
-module.exports = {createBotConatiner, getBotConatiner, getBotConatinerByID, updateBotConatinerArrayComp, updateBotConatiner, getBotConatinerByIDCompnay, updateBotConatinerByIP, deleteBotConatiner};
+// get register company botContainer
+const getRegisterCompanyBotContainer = async (req, res) => {
+    const { id } = req.params;
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    try {
+        const data = await botContainerCompanysModels.findOne({registerLicenses: id})
+        if (data) {
+            return res.status(200).send({
+                success: true,
+                message: "registro traído correctamente.",
+                data
+            });
+        }
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
+
+module.exports = {createBotContainer, getBotContainer, getBotContainerByID, updateBotContainerArrayComp, updateBotContainer, getBotContainerByIDCompany, getRegisterCompanyBotContainer, updateBotContainerByIP, deleteBotContainer};
