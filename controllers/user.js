@@ -4,6 +4,7 @@ const userAdminModels = require('../models/userAdmin');
 const superUserModels = require('../models/grantFullAdmin');
 const userTypeModels = require('../models/userType');
 const headquartersModels = require('../models/headquarters');
+const botContainerCompanysModels = require('../models/botContainerCompanys');
 const modelModels = require('../models/models');
 const jwt = require('jsonwebtoken');
 
@@ -385,7 +386,7 @@ const updateUser = async (req, res) => {
 
 // get token bot
 const tokenBot = async (req, res) => {
-  const { nameModel, userId, nBots } = req.body;
+  const { nameModel, userId, nBots, idRegisterCompBotContainer } = req.body;
   const dataModel = await modelModels.findOne({nickname: nameModel})
   if (!dataModel) {
     return res.status(400).send({
@@ -397,6 +398,14 @@ const tokenBot = async (req, res) => {
     return res.status(400).send({
       success: false,
       message: "modelo no permitida."
+    });
+  }
+
+  const dataRegister = await botContainerCompanysModels.findOne({ _id: idRegisterCompBotContainer })
+  if (!dataRegister) {
+    return res.status(400).send({
+      success: false,
+      message: "Registro no encontrado."
     });
   }
 
@@ -426,7 +435,7 @@ const tokenBot = async (req, res) => {
   }
 
   try {
-    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots}, process.env.KEY_JWT)
+    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots, idRegisterCompBotContainer}, process.env.KEY_JWT)
     return res.status(200).send({
       success: true,
       message: "Token creado correctamente",
@@ -442,7 +451,7 @@ const tokenBot = async (req, res) => {
 
 // get token killBot
 const tokenKillBot = async (req, res) => {
-  const { nameModel, userId, nBots } = req.body;
+  const { nameModel, userId, nBots, idRegisterCompBotContainer } = req.body;
   const dataModel = await modelModels.findOne({nickname: nameModel})
   if (!dataModel) {
     return res.status(400).send({
@@ -464,6 +473,13 @@ const tokenKillBot = async (req, res) => {
       message: "Usuario no encontrado."
     });
   }
+  const dataRegister = await botContainerCompanysModels.findOne({ _id: idRegisterCompBotContainer })
+  if (!dataRegister) {
+    return res.status(400).send({
+      success: false,
+      message: "Registro no encontrado."
+    });
+  }
   for (let index = 0; index < dataUser.userTypeArray.length; index++) {
     if (dataUser.userTypeArray[index].nameUserType === 'moderator') {
       break;
@@ -482,7 +498,7 @@ const tokenKillBot = async (req, res) => {
     });
   }
   try {
-    const token = jwt.sign({nameModel, userId, nBots}, process.env.KEY_JWT)
+    const token = jwt.sign({nameModel, userId, nBots, idRegisterCompBotContainer}, process.env.KEY_JWT)
     return res.status(200).send({
       success: true,
       message: "Token creado correctamente",
@@ -495,5 +511,6 @@ const tokenKillBot = async (req, res) => {
     });
   }
 }
+
 
 module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};
