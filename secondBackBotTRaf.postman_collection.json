@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "a2b29872-fbe2-4ac2-be2b-2bface8d6c84",
+		"_postman_id": "6467bf5b-3980-41db-979b-2c7e141c37c2",
 		"name": "secondBackBotTRaf",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13349022"
 	},
 	"item": [
 		{
@@ -357,6 +358,105 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get token launch bots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameModel\": \"midnight_joy_\",\r\n    \"userId\": \"62d83c77f3662542a69a2876\",\r\n    \"nBots\": \"10\",\r\n    \"idRegisterCompBotContainer\" : \"62d83c12f3662542a69a282b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/user/getTokenBot",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								"getTokenBot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get token launch bots any",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameModel\":\"12345\",\r\n    \"userId\":\"62d83c77f3662542a69a2876\",\r\n    \"nBots\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/user/getTokenBotAny",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								"getTokenBotAny"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get token launch bots mixed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nameModel\":\"midnight_joy_\",\r\n    \"userId\":\"62d83c77f3662542a69a2876\",\r\n    \"nBots\":\"10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/user/getTokenBotMixed",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								"getTokenBotMixed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get token kill bots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/user/getTokenkillBot",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"user",
+								"getTokenkillBot"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -663,6 +763,33 @@
 									"key": "id",
 									"value": null
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get model by id platform, id headquarters and nickname",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\": \"12345\",\r\n    \"platforms_idPlatform\": \"62d2f65b24cf73e038bc7eee\",\r\n    \"headquarters_idHeadquarter\": \"62d5a0be4354c695a2c5d4d3\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/model/getModelFull",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"model",
+								"getModelFull"
 							]
 						}
 					},
@@ -1113,6 +1240,31 @@
 					"response": []
 				},
 				{
+					"name": "get Register Company BotContainer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer/getRegisterCompanyBotContainer/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer",
+								"getRegisterCompanyBotContainer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62d83c12f3662542a69a2821"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "get botContainer by id",
 					"request": {
 						"method": "GET",
@@ -1196,6 +1348,40 @@
 								{
 									"key": "id",
 									"value": "6275c526991c3889651ae876"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update register company botContainer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nBots\":\"1\",\r\n    \"Kill\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/botContainer/updateAccts/:id",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"botContainer",
+								"updateAccts",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62d83c12f3662542a69a282b"
 								}
 							]
 						}
@@ -1377,7 +1563,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"namePlatform\":\"strp\"\r\n}",
+							"raw": "{\r\n    \"namePlatform\":\"stripchat\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1455,6 +1641,43 @@
 								{
 									"key": "id",
 									"value": "6276ec5f0e533d74a0fcdf1d"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get platform by name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/platform/findByName/:name",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"platform",
+								"findByName",
+								":name"
+							],
+							"variable": [
+								{
+									"key": "name",
+									"value": "chaturbate"
 								}
 							]
 						}
@@ -1660,6 +1883,143 @@
 									"key": "id",
 									"value": "6276f290828e3f73ddc8fe36"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "grantFullAdmin",
+			"item": [
+				{
+					"name": "signup superuser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"CorreoSuperU@correo.com\",\r\n    \"password\":\"123456\",\r\n    \"ipFrom\":\"1.1.1.1\",\r\n    \"latFrom\":\"1111\",\r\n    \"lonFrom\":\"1111\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/grantFullAdmin/signup",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"grantFullAdmin",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "registerLicenses",
+			"item": [
+				{
+					"name": "get register licences by id comp",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{backBotTrafic}}/registerLicenses/compnay/62cf26784095cea6ae3c32e0",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"registerLicenses",
+								"compnay",
+								"62cf26784095cea6ae3c32e0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get register licences by id comp and id platform",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"platform_idPlatform\": \"62bb2f74f7e2ecbe31b891c9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/registerLicenses/compnayAndPlat/62cf3945805d844b59f4ac8f",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"registerLicenses",
+								"compnayAndPlat",
+								"62cf3945805d844b59f4ac8f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create Register License",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"initialDateLicense\":\"2022/7/16\",\r\n    \"monthsDuration\":\"3\",\r\n    \"licenses_idLicense\":\"62d2f66d24cf73e038bc7ef5\",\r\n    \"companys_idCompany\":\"62cf3945805d844b59f4ac8f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/registerLicenses",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"registerLicenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Licences Company Platform",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"companys_idCompany\": \"62d83c12f3662542a69a281f\",\r\n    \"platforms_idPlatform\": \"62d83be5f3662542a69a280a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{backBotTrafic}}/registerLicenses/getLicencesCompanyPlatform",
+							"host": [
+								"{{backBotTrafic}}"
+							],
+							"path": [
+								"registerLicenses",
+								"getLicencesCompanyPlatform"
 							]
 						}
 					},
