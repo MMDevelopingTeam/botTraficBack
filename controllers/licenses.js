@@ -1,5 +1,7 @@
 const licencesModels = require('../models/licenses');
 const platformModels = require('../models/platform');
+const registerLicensesModels = require('../models/registerLicenses');
+const botContainerCompanysModels = require('../models/botContainerCompanys');
 
 // create license
 const createLicense = async (req, res) => {
@@ -107,6 +109,17 @@ const updateLicense = async (req, res) => {
         }
         if (monthsDuration != undefined) {
             dataLicense.monthsDuration=monthsDuration
+            const dataR = await registerLicensesModels.find({licenses_idLicense: id})
+            if (dataR) {
+                for (let index = 0; index < dataR.length; index++) {
+                    const dataRl = await registerLicensesModels.findOne({_id: dataR[index]._id})
+                    dataRl.monthsDuration=monthsDuration
+                    var currentF = new Date(dataRl.initialDateLicense);
+                    currentF.setMonth(currentF.getMonth()+parseInt(monthsDuration))
+                    dataRl.finishedDateLicense=currentF
+                    await dataRl.save()
+                }
+            }
         }
         if (type != undefined) {
             dataLicense.type=type

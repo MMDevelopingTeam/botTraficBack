@@ -25,9 +25,6 @@ const validateCreateRegisterLicense = [
     check('initialDateLicense', 'El campo es de tipo fecha YYYY/M/D')
     .exists()
     .notEmpty(),
-    check('monthsDuration', 'El campo es requerido')
-    .exists()
-    .notEmpty(),
     check('licenses_idLicense', 'El campo es requerido')
     .exists()
     .notEmpty(),

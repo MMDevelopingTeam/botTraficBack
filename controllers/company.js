@@ -66,8 +66,8 @@ const createCompany = async (req, res) => {
                     companys_idCompany: newComp._id,
                     botContainer_idBotContainer: dataB._id,
                     registerLicenses: dataReg._id,
-                    AcctsUsed: parseInt(acctRest),
-                    AcctsFree: parseInt(acctRest)
+                    acctsUsed: parseInt(acctRest),
+                    acctsFree: parseInt(acctRest)
                 })
                 const saveRegister = await newRegister.save()
                 dataB.CompanysArray=dataB.CompanysArray.concat(saveRegister._id)
@@ -82,8 +82,8 @@ const createCompany = async (req, res) => {
                     companys_idCompany: newComp._id,
                     botContainer_idBotContainer: dataB._id,
                     registerLicenses: dataReg._id,
-                    AcctsUsed: parseInt(dataBotContainers[index].accountsFree),
-                    AcctsFree: parseInt(dataBotContainers[index].accountsFree)
+                    acctsUsed: parseInt(dataBotContainers[index].accountsFree),
+                    acctsFree: parseInt(dataBotContainers[index].accountsFree)
                 })
                 const saveRegisterD = await newRegisterD.save()
                 dataB.CompanysArray=dataB.CompanysArray.concat(saveRegisterD._id)

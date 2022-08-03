@@ -244,8 +244,8 @@ const updateBotContainerArrayComp = async (req, res) => {
         }
 
         if (Launch === true) {
-            if (nBots <= dataBotComp.AcctsFree) {
-                dataBotComp.AcctsFree=dataBotComp.AcctsFree-parseInt(nBots)
+            if (nBots <= dataBotComp.acctsFree) {
+                dataBotComp.acctsFree=dataBotComp.acctsFree-parseInt(nBots)
             }else{
                 return res.status(400).send({
                     success: false,
@@ -254,8 +254,8 @@ const updateBotContainerArrayComp = async (req, res) => {
             }
         }
         if (Kill === true) {
-            if (dataBotComp.AcctsFree+parseInt(nBots) <= dataBotComp.AcctsUsed) {
-                dataBotComp.AcctsFree=dataBotComp.AcctsFree+parseInt(nBots)
+            if (dataBotComp.acctsFree+parseInt(nBots) <= dataBotComp.acctsUsed) {
+                dataBotComp.acctsFree=dataBotComp.acctsFree+parseInt(nBots)
             }else{
                 return res.status(400).send({
                     success: false,
