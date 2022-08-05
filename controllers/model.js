@@ -1,12 +1,12 @@
 const modelModels = require('../models/models');
-const headquartersModels = require('../models/headquarters');
+const companyModels = require('../models/company');
 const platformModels = require('../models/platform');
 const botContainerModels = require('../models/botContainer');
 const axios = require('axios');
 
 // create model
 const createModel = async (req, res) => {
-    const { nickname, isAllowed, isActive, platforms_idPlatform, headquarters_idHeadquarter } = req.body;
+    const { nickname, isAllowed, isActive, platforms_idPlatform, company_idCompany } = req.body;
     try {
         const dataModel = await modelModels.findOne({nickname})
         if (dataModel) {
@@ -23,8 +23,8 @@ const createModel = async (req, res) => {
                 message: "Plataforma no encontrada"
             });
         }
-        const dataHeadquarters = await headquartersModels.findOne({_id: headquarters_idHeadquarter})
-        if (!dataHeadquarters) {
+        const dataC = await companyModels.findOne({_id: company_idCompany})
+        if (!dataC) {
             return res.status(403).send({
                 success: false,
                 message: "Sede no encontrada"
@@ -35,7 +35,7 @@ const createModel = async (req, res) => {
             isAllowed, 
             isActive,
             platforms_idPlatform,
-            headquarters_idHeadquarter
+            company_idCompany
         })
         await newModel.save()
         return res.status(200).send({
@@ -101,8 +101,8 @@ const getModelByID = async (req, res) => {
         
     }
 }
-// get by id headQ model
-const getModelByIDheadQ = async (req, res) => {
+// get by id company model
+const getModelsByIDCompany = async (req, res) => {
     const { id } = req.params
     if (id === ':id') {
         return res.status(400).send({
@@ -111,7 +111,7 @@ const getModelByIDheadQ = async (req, res) => {
         });
     }
     try {
-        const dataModel = await modelModels.find({headquarters_idHeadquarter: id})
+        const dataModel = await modelModels.find({company_idCompany: id})
         if (!dataModel) {
             return res.status(400).send({
                 success: false,
@@ -190,11 +190,11 @@ const getModelByIDPlatform = async (req, res) => {
     }
 }
 
-// get model by id platform, id headQ and nickname 
+// get model by id platform, id company and nickname
 const getModelFull = async (req, res) => {
-    const { nickname, platforms_idPlatform, headquarters_idHeadquarter } = req.body
+    const { nickname, platforms_idPlatform, company_idCompany } = req.body
     try {
-        const dataModel = await modelModels.findOne({nickname, platforms_idPlatform, headquarters_idHeadquarter})
+        const dataModel = await modelModels.findOne({nickname, platforms_idPlatform, company_idCompany})
         if (!dataModel) {
             return res.status(400).send({
                 success: false,
@@ -217,7 +217,7 @@ const getModelFull = async (req, res) => {
 
 // update model
 const updateModel = async (req, res) => {
-    const { nickname, isAllowed, isActive, platforms_idPlatform, headquarters_idHeadquarter } = req.body;
+    const { nickname, isAllowed, isActive, platforms_idPlatform, company_idCompany } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -245,8 +245,8 @@ const updateModel = async (req, res) => {
         if (platforms_idPlatform != undefined) {
             dataModel.platforms_idPlatform=platforms_idPlatform
         }
-        if (headquarters_idHeadquarter != undefined) {
-            dataModel.headquarters_idHeadquarter=headquarters_idHeadquarter
+        if (company_idCompany != undefined) {
+            dataModel.company_idCompany=company_idCompany
         }
         await dataModel.save()
         return res.status(200).send({
@@ -292,4 +292,4 @@ const deleteModel = async (req, res) => {
 }
 
 
-module.exports = {createModel, getModel, getModelByID, getModelByIDheadQ, getModelFull, getModelByIDPlatform, getKillbotsByModel, updateModel, deleteModel};
+module.exports = {createModel, getModel, getModelByID, getModelsByIDCompany, getModelFull, getModelByIDPlatform, getKillbotsByModel, updateModel, deleteModel};

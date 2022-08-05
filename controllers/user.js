@@ -3,7 +3,7 @@ const userModels = require('../models/user');
 const userAdminModels = require('../models/userAdmin');
 const superUserModels = require('../models/grantFullAdmin');
 const userTypeModels = require('../models/userType');
-const headquartersModels = require('../models/headquarters');
+const companyModels = require('../models/company');
 const botContainerCompanysModels = require('../models/botContainerCompanys');
 const modelModels = require('../models/models');
 const jwt = require('jsonwebtoken');
@@ -43,7 +43,7 @@ const signIn = async (req, res) => {
 // register
 const signUp = async (req, res) => {
   
-  const { name, user, email, password, userTypeArray, headquarters_idHeadquarter } = req.body;
+  const { name, user, email, password, userTypeArray, company_idCompany } = req.body;
 
   // return console.log(userTypeArray[1]);
   try {
@@ -78,11 +78,11 @@ const signUp = async (req, res) => {
           message: 'El correo ya esta registrado'
         });
       }
-      const dataHeadquarters = await headquartersModels.findOne({_id: headquarters_idHeadquarter})
-      if (!dataHeadquarters) {
+      const dataC = await companyModels.findOne({_id: company_idCompany})
+      if (!dataC) {
         return res.status(403).send({
           success: false,
-          message: 'Sede no encontrada'
+          message: 'Compañia no encontrada'
         });
       }
       const passwordHash = await encrypt(password)
@@ -92,7 +92,7 @@ const signUp = async (req, res) => {
           email,
           password: passwordHash,
           userTypeArray,
-          headquarters_idHeadquarter
+          company_idCompany
       });
       await newUser.save();
       const token = jwt.sign({_id: newUser._id }, process.env.KEY_JWT)
@@ -251,7 +251,7 @@ const GetUserByEmail = async (req, res) => {
   }
 }
 
-// get user by headQ
+// get user by Company
 const GetUser = async (req, res) => {
   const { id } = req.params
   if (id === ':id') {
@@ -261,7 +261,7 @@ const GetUser = async (req, res) => {
       });
   }
   try {
-    const dataUsers = await userModels.find({headquarters_idHeadquarter: id})
+    const dataUsers = await userModels.find({company_idCompany: id})
     if (!dataUsers) {
         return res.status(400).send({
             success: false,
@@ -314,7 +314,7 @@ const deleteUser = async (req, res) => {
 // update user
 const updateUser = async (req, res) => {
   const { id } = req.params
-  const { name, user, email, password, userTypeArray, headquarters_idHeadquarter } = req.body;
+  const { name, user, email, password, userTypeArray, company_idCompany } = req.body;
   if (id === ':id') {
       return res.status(400).send({
           success: false,
@@ -361,15 +361,15 @@ const updateUser = async (req, res) => {
         });
       }
     }
-    if (headquarters_idHeadquarter != undefined) {
-      const dataheadquarters = await headquartersModels.findOne({_id: headquarters_idHeadquarter})
-      if (!dataheadquarters) {
+    if (company_idCompany != undefined) {
+      const dataC = await companyModels.findOne({_id: company_idCompany})
+      if (!dataC) {
           return res.status(400).send({
               success: false,
               message: "Sede no encontrada"
           });
       }
-      dataUser.headquarters_idHeadquarter=headquarters_idHeadquarter
+      dataUser.company_idCompany=company_idCompany
     }
     await dataUser.save()
     return res.status(200).send({
@@ -387,7 +387,14 @@ const updateUser = async (req, res) => {
 // get token bot
 const tokenBot = async (req, res) => {
   const { nameModel, userId, nBots, idRegisterCompBotContainer } = req.body;
-  const dataModel = await modelModels.findOne({nickname: nameModel})
+  const dataUser = await userModels.findOne({ _id: userId }).populate({path: 'userTypeArray'})
+  if (!dataUser) {
+    return res.status(400).send({
+      success: false,
+      message: "Usuario no encontrado."
+    });
+  }
+  const dataModel = await modelModels.findOne({nickname: nameModel, company_idCompany: dataUser.company_idCompany})
   if (!dataModel) {
     return res.status(400).send({
       success: false,
@@ -408,14 +415,6 @@ const tokenBot = async (req, res) => {
       message: "Registro no encontrado."
     });
   }
-
-  const dataUser = await userModels.findOne({ _id: userId }).populate({path: 'userTypeArray'})
-  if (!dataUser) {
-    return res.status(400).send({
-      success: false,
-      message: "Usuario no encontrado."
-    });
-  }
   for (let index = 0; index < dataUser.userTypeArray.length; index++) {
     if (dataUser.userTypeArray[index].nameUserType === 'moderator') {
       break;
@@ -426,16 +425,16 @@ const tokenBot = async (req, res) => {
       });
     }
   }
-  const dataHeadQ = await headquartersModels.findOne({_id: dataModel.headquarters_idHeadquarter})
-  if (!dataHeadQ) {
+  const dataC = await companyModels.findOne({_id: dataModel.company_idCompany})
+  if (!dataC) {
     return res.status(400).send({
       success: false,
-      message: "Sede no encontrada."
+      message: "Compañia no encontrada."
     });
   }
 
   try {
-    const token = jwt.sign({nameModel, userId, headquarter: dataModel.headquarters_idHeadquarter, company: dataHeadQ.company_idCompany, nBots, idRegisterCompBotContainer}, process.env.KEY_JWT)
+    const token = jwt.sign({nameModel, userId, company: dataModel.company_idCompany, nBots, idRegisterCompBotContainer}, process.env.KEY_JWT)
     return res.status(200).send({
       success: true,
       message: "Token creado correctamente",
@@ -452,7 +451,14 @@ const tokenBot = async (req, res) => {
 // get token killBot
 const tokenKillBot = async (req, res) => {
   const { nameModel, userId, nBots, idRegisterCompBotContainer } = req.body;
-  const dataModel = await modelModels.findOne({nickname: nameModel})
+  const dataUser = await userModels.findOne({ _id: userId }).populate({path: 'userTypeArray'})
+  if (!dataUser) {
+    return res.status(400).send({
+      success: false,
+      message: "Usuario no encontrado."
+    });
+  }
+  const dataModel = await modelModels.findOne({nickname: nameModel, company_idCompany: dataUser.company_idCompany})
   if (!dataModel) {
     return res.status(400).send({
       success: false,
@@ -466,13 +472,6 @@ const tokenKillBot = async (req, res) => {
     });
   }
 
-  const dataUser = await userModels.findOne({ _id: userId }).populate({path: 'userTypeArray'})
-  if (!dataUser) {
-    return res.status(400).send({
-      success: false,
-      message: "Usuario no encontrado."
-    });
-  }
   const dataRegister = await botContainerCompanysModels.findOne({ _id: idRegisterCompBotContainer })
   if (!dataRegister) {
     return res.status(400).send({
@@ -490,11 +489,11 @@ const tokenKillBot = async (req, res) => {
       });
     }
   }
-  const dataHeadQ = await headquartersModels.findOne({_id: dataModel.headquarters_idHeadquarter})
-  if (!dataHeadQ) {
+  const dataC = await companyModels.findOne({_id: dataModel.company_idCompany})
+  if (!dataC) {
     return res.status(400).send({
       success: false,
-      message: "Sede no encontrada."
+      message: "Compañia no encontrada."
     });
   }
   try {

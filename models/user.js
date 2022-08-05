@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true, maxlength: 150 },
         password: { type: String, required: true, maxlength: 75 },
         userTypeArray: [{type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserType'}],
-        headquarters_idHeadquarter: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'headquarters_idHeadquarter' }
+        company_idCompany: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'company_idCompany' }
     }
 )
 

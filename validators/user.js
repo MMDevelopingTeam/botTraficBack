@@ -38,7 +38,7 @@ const validateCreateSignUp = [
     check('userTypeArray', 'El campo es requerido')
     .exists()
     .notEmpty(),
-    check('headquarters_idHeadquarter', 'El campo es requerido')
+    check('company_idCompany', 'El campo es requerido')
     .exists()
     .notEmpty(),
     (req, res, next) => {

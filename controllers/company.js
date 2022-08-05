@@ -232,38 +232,6 @@ const updateCompany = async (req, res) => {
               });
             }
         }
-        if (botContainerArray != undefined) {
-            try {
-              for (let index = 0; index < botContainerArray.length; index++) {
-                const dataUserL = await botContainerModels.findOne({_id: botContainerArray[index]})
-                if (!dataUserL) {
-                  return res.status(403).send({
-                    success: false,
-                    message: `El botContainer_id ${botContainerArray[index]} no existe`
-                  });
-                }
-                dataCompany.botContainerArray.map(
-                    data => {
-                        newArray.push(String(data._id))
-                    }
-                )
-                let i = newArray.indexOf(botContainerArray[index])
-                if (i === -1) {
-                    dataCompany.botContainerArray=dataCompany.botContainerArray.concat(botContainerArray[index])
-                }else{
-                    return res.status(403).send({
-                        success: false,
-                        message: `El botContainer ya esta registrada`
-                    });
-                }
-              }
-            } catch (error) {
-              return res.status(400).send({
-                  success: false,
-                  message: error.message  
-              });
-            }
-        }
         await dataCompany.save()
         return res.status(200).send({
             success: true,
