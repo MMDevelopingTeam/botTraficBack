@@ -194,6 +194,54 @@ const GetUserByID = async (req, res) => {
   }
 }
 
+// get user by user
+const GetUserByUser = async (req, res) => {
+  const { user, company_idCompany } = req.body
+  try {
+    const dataUser = await userModels.findOne({user, company_idCompany})
+    if (!dataUser) {
+        return res.status(400).send({
+            success: false,
+            message: "Usuario no encontrado"
+        });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Usuario traido correctamente.",
+      dataUser
+  });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+  });
+  }
+}
+
+// get user by user
+const GetUserByUserAndUserA = async (req, res) => {
+  const { user, company_idCompany } = req.body
+  try {
+    const dataUserA = await userAdminModels.findOne({user, company_idCompany})
+    if (!dataUserA) {
+        return res.status(400).send({
+            success: false,
+            message: "Usuario no encontrado"
+        });
+    }
+    return res.status(200).send({
+      success: true,
+      message: "Usuario traido correctamente.",
+      dataUserA
+  });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+  });
+  }
+}
+
 // get by user token
 const getMe = async (req, res) => {
 
@@ -512,4 +560,4 @@ const tokenKillBot = async (req, res) => {
 }
 
 
-module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};
+module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, GetUserByUser, GetUserByUserAndUserA, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};

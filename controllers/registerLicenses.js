@@ -3,6 +3,7 @@ const companyModels = require('../models/company');
 const registerLicensesModels = require('../models/registerLicenses');
 const botContainerCompanysModels = require('../models/botContainerCompanys');
 const botContainerModels = require('../models/botContainer');
+const {desactiveRegisterLicenceComp} = require('../utils/expiredLicences');
 var mongoose = require('mongoose');
 
 // create RegisterLicense
@@ -413,4 +414,42 @@ const desactiveRegisterLicence = async (req, res) => {
     }
 }
 
-module.exports = {createRegisterLicense, getRegisterLicenses, getRegisterLicensesByIDLicense, getLicencesCompanyPlatform, desactiveRegisterLicence, getRegisterLicensesByIDCompany, getRegisterLicensesByIDCompanyAndPlat, getRegisterLicenseByID, updateRegisterLicense, deleteRegisterLicense};
+// expiration Licences By Company
+const expirationLicencesByCompany = async (req, res) => {
+    const { id } = req.params;
+    const date = new Date();
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    try {
+        const dataC = await companyModels.findOne({_id: id})
+        if (!dataC) {
+            return res.status(400).send({
+                success: false,
+                message: "compañia no encontrada"
+            });
+        }
+        if (dataC.registerLicensesArray.length <= 0) {
+            return console.log("No existen registros de licencias");
+        }
+        dataC.registerLicensesArray.map(data => {
+            if (Date.parse(data.finishedDateLicense) <= Date.parse(date)) {
+                desactiveRegisterLicenceComp(data._id)
+            }
+        })
+        return res.status(200).send({
+            success: true,
+            message: "Verificación de licencias terminada"
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+module.exports = {createRegisterLicense, getRegisterLicenses, getRegisterLicensesByIDLicense, expirationLicencesByCompany, getLicencesCompanyPlatform, desactiveRegisterLicence, getRegisterLicensesByIDCompany, getRegisterLicensesByIDCompanyAndPlat, getRegisterLicenseByID, updateRegisterLicense, deleteRegisterLicense};

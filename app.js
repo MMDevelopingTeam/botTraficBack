@@ -1,22 +1,21 @@
 const express = require("express")
 const initDB = require('./config/db')
 const cors = require("cors")
-require("dotenv").config();
 const bodyParser = require('body-parser');
-const app = express()
+const { Server } = require('./classes/server');
 
-app.use(cors())
-app.use(express.json())
-app.use(
+const server = Server.instance;
+
+server.app.use(cors({ origin: true, credentials: true }));
+server.app.use(express.json());
+server.app.use(
     bodyParser.json({limit: '20mb'})
-)
-app.use(
+);
+server.app.use(
     bodyParser.urlencoded({limit: '20mb', extended: true})
-)
+);
 
-const port = process.env.PORT || 3020
-
-app.use((req, res, next) => {
+server.app.use((req, res, next) => {
 
     // Dominio que tengan acceso (ej. 'http://example.com')
        res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,10 +30,10 @@ app.use((req, res, next) => {
 })
 
 //Rutas
-app.use("/api", require("./routes"))
+server.app.use("/api", require("./routes"));
 
 initDB();
 
-app.listen(port, () => {
-    console.log(`App lista por http://localhost:${port}`);
-})
+server.start(() => {
+    console.log(`App lista por http://localhost:${server.port}`);
+});

@@ -7,8 +7,10 @@ const UserAdminSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true, maxlength: 150 },
         password: { type: String, required: true, maxlength: 65 },
         userType: { type: String, default: 'admin'},
-        company_idCompany: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'company_idCompany' }
+        company_idCompany: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Company', autopopulate: true }
     }
 )
+
+UserAdminSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model('UserAdmin', UserAdminSchema)

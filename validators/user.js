@@ -82,4 +82,16 @@ const validateCreateToken = [
     }
 ]
 
-module.exports = {validateCreateSignIn, validateCreateSignUpAdmin, validateCreateToken, validateGetUser, validateCreateSignUp}
+const validateGetUserByU = [
+    check('user', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    check('company_idCompany', 'El campo es requerido')
+    .exists()
+    .notEmpty(),
+    (req, res, next) => {
+        validateResult(req, res, next)
+    }
+]
+
+module.exports = {validateCreateSignIn, validateCreateSignUpAdmin, validateGetUserByU, validateCreateToken, validateGetUser, validateCreateSignUp}
