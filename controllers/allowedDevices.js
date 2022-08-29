@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 
 // create allowedDevices
 const createAllowedDevices = async (req, res) => {
-    const { lastConnection, User_idUser, sourceIP, userAgent, company_idCompany } = req.body;
+    const { lastConnection, User_idUser, mac, userAgent, company_idCompany } = req.body;
     try {
         const dataA = await allowedDevicesModels.findOne({User_idUser})
         if (dataA) {
@@ -16,8 +16,8 @@ const createAllowedDevices = async (req, res) => {
                 message: "El dispositivo ya existe."
             });
         }
-        // const dataIp = await allowedDevicesModels.findOne({sourceIP})
-        // const dataUIp = await allowedDevicesUserAdminModels.findOne({sourceIP})
+        // const dataIp = await allowedDevicesModels.findOne({mac})
+        // const dataUIp = await allowedDevicesUserAdminModels.findOne({mac})
         // if (dataUIp) {
         //     return res.status(403).send({
         //         success: false,
@@ -45,7 +45,7 @@ const createAllowedDevices = async (req, res) => {
             });
         }
         const newAllowedDevice = new allowedDevicesModels({
-            lastConnection, User_idUser, sourceIP, userAgent, company_idCompany
+            lastConnection, User_idUser, mac, userAgent, company_idCompany
         })
         const saveRegister = await newAllowedDevice.save()
         dataC.devicesArray=dataC.devicesArray.concat(saveRegister._id)
@@ -65,7 +65,7 @@ const createAllowedDevices = async (req, res) => {
 
 // create allowedDevices userAdmin
 const createAllowedDevicesUserAdmin = async (req, res) => {
-    const { lastConnection, User_idUser, sourceIP, userAgent, company_idCompany } = req.body;
+    const { lastConnection, User_idUser, mac, userAgent, company_idCompany } = req.body;
     try {
         const dataA = await allowedDevicesUserAdminModels.findOne({UserAdmin_idUserAdmin: User_idUser})
         if (dataA) {
@@ -74,8 +74,8 @@ const createAllowedDevicesUserAdmin = async (req, res) => {
                 message: "El dispositivo ya existe."
             });
         }
-        // const dataIp = await allowedDevicesModels.findOne({sourceIP})
-        // const dataUIp = await allowedDevicesUserAdminModels.findOne({sourceIP})
+        // const dataIp = await allowedDevicesModels.findOne({mac})
+        // const dataUIp = await allowedDevicesUserAdminModels.findOne({mac})
         // if (dataIp) {
         //     return res.status(403).send({
         //         success: false,
@@ -103,7 +103,7 @@ const createAllowedDevicesUserAdmin = async (req, res) => {
             });
         }
         const newAllowedDevice = new allowedDevicesUserAdminModels({
-            lastConnection, UserAdmin_idUserAdmin: User_idUser, sourceIP, userAgent, company_idCompany
+            lastConnection, UserAdmin_idUserAdmin: User_idUser, mac, userAgent, company_idCompany
         })
         const saveRegister = await newAllowedDevice.save()
         dataC.devicesUserAdminArray=dataC.devicesUserAdminArray.concat(saveRegister._id)
@@ -123,12 +123,12 @@ const createAllowedDevicesUserAdmin = async (req, res) => {
 
 // Allow Access
 const AllowAccess = async (req, res) => {
-    const { lastConnection, User_idUser, sourceIP, userAgent, company_idCompany } = req.body;
+    const { lastConnection, User_idUser, mac, userAgent, company_idCompany } = req.body;
     try {
         const dataA = await allowedDevicesModels.findOne({User_idUser})
         if (dataA) {
-            // const dataIp = await allowedDevicesModels.findOne({sourceIP})
-            // const datauA = await allowedDevicesUserAdminModels.findOne({sourceIP})
+            // const dataIp = await allowedDevicesModels.findOne({mac})
+            // const datauA = await allowedDevicesUserAdminModels.findOne({mac})
             // if (dataIp) {
             //     return res.status(403).send({
             //         success: false,
@@ -141,10 +141,10 @@ const AllowAccess = async (req, res) => {
             //         message: "IP ya registrada"
             //     });
             // }
-            dataA.sourceIP=sourceIP
+            dataA.mac=mac
             await dataA.save()
         }else{
-            const dataIp = await allowedDevicesModels.findOne({sourceIP})
+            const dataIp = await allowedDevicesModels.findOne({mac})
             if (dataIp) {
                 return res.status(403).send({
                     success: false,
@@ -167,7 +167,7 @@ const AllowAccess = async (req, res) => {
             }
     
             const newAllowedDevice = new allowedDevicesModels({
-                lastConnection, User_idUser, sourceIP, userAgent, company_idCompany
+                lastConnection, User_idUser, mac, userAgent, company_idCompany
             })
             const saveRegister = await newAllowedDevice.save()
             dataC.devicesArray=dataC.devicesArray.concat(saveRegister._id)
@@ -189,12 +189,12 @@ const AllowAccess = async (req, res) => {
 
 // Allow Access user admin
 const AllowAccessUSerA = async (req, res) => {
-    const { lastConnection, User_idUser, sourceIP, userAgent, company_idCompany } = req.body;
+    const { lastConnection, User_idUser, mac, userAgent, company_idCompany } = req.body;
     try {
         const dataA = await allowedDevicesUserAdminModels.findOne({UserAdmin_idUserAdmin: User_idUser})
         if (dataA) {
-            // const dataIp = await allowedDevicesUserAdminModels.findOne({sourceIP})
-            // const dataUIp = await allowedDevicesModels.findOne({sourceIP})
+            // const dataIp = await allowedDevicesUserAdminModels.findOne({mac})
+            // const dataUIp = await allowedDevicesModels.findOne({mac})
             // if (dataIp) {
             //     return res.status(403).send({
             //         success: false,
@@ -207,10 +207,10 @@ const AllowAccessUSerA = async (req, res) => {
             //         message: "IP ya registrada"
             //     });
             // }
-            dataA.sourceIP=sourceIP
+            dataA.mac=mac
             await dataA.save()
         }else{
-            const dataIp = await allowedDevicesUserAdminModels.findOne({sourceIP})
+            const dataIp = await allowedDevicesUserAdminModels.findOne({mac})
             if (dataIp) {
                 return res.status(403).send({
                     success: false,
@@ -233,7 +233,7 @@ const AllowAccessUSerA = async (req, res) => {
             }
     
             const newAllowedDevice = new allowedDevicesUserAdminModels({
-                lastConnection, UserAdmin_idUserAdmin: User_idUser, sourceIP, userAgent, company_idCompany
+                lastConnection, UserAdmin_idUserAdmin: User_idUser, mac, userAgent, company_idCompany
             })
             const saveRegister = await newAllowedDevice.save()
             dataC.devicesUserAdminArray=dataC.devicesUserAdminArray.concat(saveRegister._id)
@@ -314,7 +314,7 @@ const getAllowedDevicesByIp = async (req, res) => {
         });
     }
     try {
-        const dataA = await allowedDevicesModels.findOne({sourceIP: ip})
+        const dataA = await allowedDevicesModels.findOne({mac: ip})
         if (!dataA) {
             return res.status(400).send({
                 success: false,
@@ -370,7 +370,7 @@ const getAllowedDevicesByIdUser = async (req, res) => {
 
 // update allowedDevices
 const updateAllowedDevices = async (req, res) => {
-    const { lastConnection, User_idUser, sourceIP, userAgent, company_idCompany } = req.body;
+    const { lastConnection, User_idUser, mac, userAgent, company_idCompany } = req.body;
     const { id } = req.params;
     if (id === ':id') {
         return res.status(400).send({
@@ -395,8 +395,8 @@ const updateAllowedDevices = async (req, res) => {
                 dataA.User_idUser=User_idUser
             }
         }
-        if (sourceIP != undefined) {
-            dataA.sourceIP=sourceIP
+        if (mac != undefined) {
+            dataA.mac=mac
         }
         if (userAgent != undefined) {
             dataA.userAgent=userAgent

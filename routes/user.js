@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { signIn, signUp, GetUserByID, deleteUser, updateUser, GetUserByEmail, getMe, GetUser, tokenBot, tokenKillBot, getTypeUserByToken, GetUserByUser, GetUserByUserAndUserA } = require("../controllers/user");
+const { signIn, signUp, GetUserByID, deleteUser, updateUser, GetUserByEmail, getMe, GetUser, tokenBot, verifyTokenR, tokenKillBot, getTypeUserByToken, GetUserByUser, GetUserByUserAndUserA, NewsignIn, refreshToken, TypeUserByToken } = require("../controllers/user");
 const { validateCreateSignIn, validateCreateSignUp, validateCreateToken, validateGetUserByU } = require("../validators/user");
 const { verifyToken } = require("../validators/validateToken");
 
 router.post("/signin", validateCreateSignIn, signIn)
+router.post("/signinApp", NewsignIn)
+router.post("/verifyToken", verifyTokenR)
+router.post("/refreshToken", refreshToken)
 router.post("/signup", validateCreateSignUp, signUp)
 router.get("/getTypeUserByToken", verifyToken, getTypeUserByToken)
+router.post("/TypeUserByToken", TypeUserByToken)
 router.get("/byToken", verifyToken, getMe)
 router.post("/getTokenBot", validateCreateToken, tokenBot)
 router.post("/getTokenBotAny", validateCreateToken, tokenBot)

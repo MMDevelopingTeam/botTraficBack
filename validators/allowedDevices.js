@@ -2,7 +2,7 @@ const { check } = require('express-validator')
 const { validateResult } = require('../utils/validateHelper')
 
 const validateCreateAllowedDevices = [
-    check('sourceIP', 'El campo es requerido')
+    check('mac', 'El campo es requerido')
     .exists()
     .notEmpty(),
     check('company_idCompany', 'El campo es requerido')

@@ -6,7 +6,10 @@ const userTypeModels = require('../models/userType');
 const companyModels = require('../models/company');
 const botContainerCompanysModels = require('../models/botContainerCompanys');
 const modelModels = require('../models/models');
+const allowedDevicesModels = require('../models/allowedDevices');
+const allowedDevicesUserAdminModels = require('../models/allowedDevicesUserAdmin');
 const jwt = require('jsonwebtoken');
+const { sendNotificationsAccs } = require('../utils/sendNotifications');
 
 // login
 const signIn = async (req, res) => {
@@ -25,7 +28,8 @@ const signIn = async (req, res) => {
     }
     const checkPassword = await compare(password, user.password)
     if (checkPassword) {
-      const token = jwt.sign({_id: user._id}, process.env.KEY_JWT)
+
+      const token = jwt.sign({_id: user._id}, process.env.KEY_JWT, {expiresIn: "12h"})
       return res.status(200).json({
         success: true,
         message: "login exitoso",
@@ -38,6 +42,71 @@ const signIn = async (req, res) => {
         message: "Password incorrecto"
       });
     }
+}
+
+const NewsignIn = async (req, res) => {
+  const { email, password, mac } = req.body;
+  let user = null
+  const dataUser = await userModels.findOne({email})
+  const dataUserAdmin = await userAdminModels.findOne({email})
+  const dataSuperU = await superUserModels.findOne({email})
+  if (dataUser || dataUserAdmin || dataSuperU) {
+    user=dataUser || dataUserAdmin || dataSuperU
+  }else{
+    return res.status(404).send({
+      success: false,
+      message: "El usuario no existe"
+    });
+  }
+  const checkPassword = await compare(password, user.password)
+  if (checkPassword) {
+    if (user.ipFrom) {
+      const token = jwt.sign({_id: user._id}, process.env.KEY_JWT, {expiresIn: "12h"})
+      return res.status(200).json({
+        success: true,
+        message: "login exitoso",
+        token,
+        user
+      })
+    }else{
+      const dataDevice = await allowedDevicesModels.findOne({User_idUser: user._id})
+      const dataDeviceA = await allowedDevicesUserAdminModels.findOne({UserAdmin_idUserAdmin: user._id})
+      let device = null;
+      if (dataDevice || dataDeviceA) {
+        device=dataDevice || dataDeviceA
+        if (device.mac !== mac) {
+          sendNotificationsAccs(user._id, user.company_idCompany, mac);
+          return res.status(400).json({
+            success: false,
+            message: "Hemos enviado una notificación al administrador para validar el dispositivo"
+          })
+        }else{
+          const token = jwt.sign({_id: user._id}, process.env.KEY_JWT, {expiresIn: "12h"})
+          return res.status(200).json({
+            success: true,
+            message: "login exitoso",
+            token,
+            user
+          })
+        }
+      }else{
+        // return res.status(404).send({
+        //   success: false,
+        //   message: "Dispositivo no encontrado"
+        // });
+        sendNotificationsAccs(user._id, user.company_idCompany, mac);
+        return res.status(400).json({
+          success: false,
+          message: "Hemos enviado una notificación al administrador para validar el dispositivo"
+        })
+      }
+    }
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: "Password incorrecto"
+    });
+  }
 }
 
 // register
@@ -113,9 +182,59 @@ const signUp = async (req, res) => {
 }
 
 // get Type User By Token
-
 const getTypeUserByToken = async (req, res) => {
   const token = req.headers.authorization.split(' ').pop();
+  try {
+    const payload = jwt.verify(token, process.env.KEY_JWT)
+    const id = payload._id
+    
+    let user = null;
+    
+    const dataUser = await userModels.findOne({_id: id})
+    const dataUserAdmin = await userAdminModels.findOne({_id: id})
+    const dataSuperU = await superUserModels.findOne({_id: id})
+
+    if (dataUser || dataUserAdmin || dataSuperU) {
+      user=dataUser || dataUserAdmin || dataSuperU
+    }else{
+      return res.status(404).send({
+        success: false,
+        message: "El usuario no existe"
+      });
+    }
+
+    if (user.userTypeArray) {
+      return res.status(200).send({
+        success: true,
+        message: 'Tipo de usuario encontrado exitosamente',
+        user: true
+      });
+    }
+    if (user.company_idCompany) {
+      return res.status(200).send({
+        success: true,
+        message: 'Tipo de usuario encontrado exitosamente',
+        userAdmin: true
+      });
+    }
+    if (user.ipFrom) {
+      return res.status(200).send({
+        success: true,
+        message: 'Tipo de usuario encontrado exitosamente',
+        superUser: true
+      });
+    }
+  } catch (error) {
+    return res.status(403).send({
+        success: false,
+        message: error.message
+    });
+  }
+} 
+
+// get Type User By Token
+const TypeUserByToken = async (req, res) => {
+  const {token} = req.body;
   try {
     const payload = jwt.verify(token, process.env.KEY_JWT)
     const id = payload._id
@@ -559,5 +678,65 @@ const tokenKillBot = async (req, res) => {
   }
 }
 
+// verifyToken
+const verifyTokenR = async (req, res) => {
+  const { token } = req.body;
+  jwt.verify(token, process.env.KEY_JWT, (err, authData) => {
+    if (err) {
+          return res.status(200).send({
+            success: false
+          });
+    }else{
+        return res.status(200).send({
+            success: true,
+            authData
+          });
+    }
+})
+}
 
-module.exports = {signIn, signUp, GetUserByID, GetUser, GetUserByEmail, getMe, GetUserByUser, GetUserByUserAndUserA, deleteUser, updateUser, tokenKillBot, tokenBot, getTypeUserByToken};
+// refresh token
+const refreshToken = async (req, res) => {
+  const { token, id } = req.body;
+  jwt.verify(token, process.env.KEY_JWT, (err, authData) => {
+    if (err) {
+        return res.status(400).send({
+          success: false,
+          message: err.message
+        });
+    }else{
+        if (authData._id === id) {
+          const newToken = jwt.sign({_id: id}, process.env.KEY_JWT, {expiresIn: "6h"})
+          return res.status(200).send({
+            success: true,
+            newToken
+          });
+        }else{
+          return res.status(400).send({
+            success: false,
+            message: "error en el token"
+          });
+        }
+    }
+})
+}
+
+module.exports = {
+  signIn, 
+  verifyTokenR, 
+  refreshToken,
+  TypeUserByToken,
+  NewsignIn, 
+  signUp, 
+  GetUserByID, 
+  GetUser, 
+  GetUserByEmail, 
+  getMe, 
+  GetUserByUser, 
+  GetUserByUserAndUserA, 
+  deleteUser, 
+  updateUser, 
+  tokenKillBot, 
+  tokenBot, 
+  getTypeUserByToken
+};
