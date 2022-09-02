@@ -30,8 +30,14 @@ const createModel = async (req, res) => {
                 message: "Sede no encontrada"
             });
         }
+        let newNickname = null;
+        if (dataPlatform.namePlatform === "chaturbate") {
+            newNickname=nickname.toLowerCase()
+        }else{
+            newNickname=nickname
+        }
         const newModel = new modelModels({
-            nickname, 
+            nickname: newNickname, 
             isAllowed, 
             isActive,
             platforms_idPlatform,
