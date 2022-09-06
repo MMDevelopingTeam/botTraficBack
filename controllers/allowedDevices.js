@@ -144,13 +144,13 @@ const AllowAccess = async (req, res) => {
             dataA.mac=mac
             await dataA.save()
         }else{
-            const dataIp = await allowedDevicesModels.findOne({mac})
-            if (dataIp) {
-                return res.status(403).send({
-                    success: false,
-                    message: "IP ya registrada"
-                });
-            }
+            // const dataIp = await allowedDevicesModels.findOne({mac})
+            // if (dataIp) {
+            //     return res.status(403).send({
+            //         success: false,
+            //         message: "IP ya registrada"
+            //     });
+            // }
             const dataU = await userModels.findOne({_id: User_idUser})
             if (!dataU) {
                 return res.status(403).send({
@@ -210,13 +210,13 @@ const AllowAccessUSerA = async (req, res) => {
             dataA.mac=mac
             await dataA.save()
         }else{
-            const dataIp = await allowedDevicesUserAdminModels.findOne({mac})
-            if (dataIp) {
-                return res.status(403).send({
-                    success: false,
-                    message: "IP ya registrada"
-                });
-            }
+            // const dataIp = await allowedDevicesUserAdminModels.findOne({mac})
+            // if (dataIp) {
+            //     return res.status(403).send({
+            //         success: false,
+            //         message: "IP ya registrada"
+            //     });
+            // }
             const dataUa = await userAdminModels.findOne({_id: User_idUser})
             if (!dataUa) {
                 return res.status(403).send({
