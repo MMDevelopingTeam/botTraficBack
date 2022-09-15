@@ -1,3 +1,4 @@
+const { Server } = require('../classes/server');
 const { encrypt, compare } = require('../utils/handleBcrypt')
 const userModels = require('../models/user');
 const userAdminModels = require('../models/userAdmin');
@@ -6,14 +7,18 @@ const userTypeModels = require('../models/userType');
 const companyModels = require('../models/company');
 const botContainerCompanysModels = require('../models/botContainerCompanys');
 const modelModels = require('../models/models');
+const accessLogModels = require('../models/accessLog');
+const accessLogAdminModels = require('../models/accessLogAdmin');
 const allowedDevicesModels = require('../models/allowedDevices');
 const allowedDevicesUserAdminModels = require('../models/allowedDevicesUserAdmin');
 const jwt = require('jsonwebtoken');
 const { sendNotificationsAccs } = require('../utils/sendNotifications');
 
+const server = Server.instance;
+
 // login
 const signIn = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, address } = req.body;
     let user = null
     const dataUser = await userModels.findOne({email})
     const dataUserAdmin = await userAdminModels.findOne({email})
@@ -30,6 +35,26 @@ const signIn = async (req, res) => {
     if (checkPassword) {
 
       const token = jwt.sign({_id: user._id}, process.env.KEY_JWT, {expiresIn: "12h"})
+      if (user.userTypeArray) {
+        const newALog = new accessLogModels({
+          user: email,
+          address,
+          hadAccess: true,
+          User_idUser: user._id
+        })
+        await newALog.save()
+        server.io.emit('updateStats', 'updateStats')
+      } 
+      if (user.userType) {
+        const newALogA = new accessLogAdminModels({
+          user: email,
+          address,
+          hadAccess: true,
+          UserAdmin_idUserAdmin: user._id
+        })
+        await newALogA.save()
+        server.io.emit('updateStats', 'updateStats')
+      }
       return res.status(200).json({
         success: true,
         message: "login exitoso",
@@ -37,6 +62,26 @@ const signIn = async (req, res) => {
         user
       })
     } else {
+      if (user.userTypeArray) {
+        const newALog = new accessLogModels({
+          user: email,
+          address,
+          hadAccess: false,
+          User_idUser: user._id
+        })
+        await newALog.save()
+        server.io.emit('updateStats', 'updateStats')
+      } 
+      if (user.userType) {
+        const newALogA = new accessLogAdminModels({
+          user: email,
+          address,
+          hadAccess: false,
+          UserAdmin_idUserAdmin: user._id
+        })
+        await newALogA.save()
+        server.io.emit('updateStats', 'updateStats')
+      }
       return res.status(403).send({
         success: false,
         message: "Password incorrecto"
@@ -82,6 +127,26 @@ const NewsignIn = async (req, res) => {
           })
         }else{
           const token = jwt.sign({_id: user._id}, process.env.KEY_JWT, {expiresIn: "12h"})
+          if (user.userTypeArray) {
+            const newALog = new accessLogModels({
+              user: email,
+              address: mac,
+              hadAccess: true,
+              User_idUser: user._id
+            })
+            await newALog.save()
+            server.io.emit('updateStats', 'updateStats')
+          } 
+          if (user.userType) {
+            const newALogA = new accessLogAdminModels({
+              user: email,
+              address: mac,
+              hadAccess: true,
+              UserAdmin_idUserAdmin: user._id
+            })
+            await newALogA.save()
+            server.io.emit('updateStats', 'updateStats')
+          }
           return res.status(200).json({
             success: true,
             message: "login exitoso",
@@ -94,6 +159,26 @@ const NewsignIn = async (req, res) => {
         //   success: false,
         //   message: "Dispositivo no encontrado"
         // });
+        if (user.userTypeArray) {
+          const newALog = new accessLogModels({
+            user: email,
+            address: mac,
+            hadAccess: false,
+            User_idUser: user._id
+          })
+          await newALog.save()
+          server.io.emit('updateStats', 'updateStats')
+        } 
+        if (user.userType) {
+          const newALogA = new accessLogAdminModels({
+            user: email,
+            address: mac,
+            hadAccess: false,
+            UserAdmin_idUserAdmin: user._id
+          })
+          await newALogA.save()
+          server.io.emit('updateStats', 'updateStats')
+        }
         sendNotificationsAccs(user._id, user.company_idCompany, mac);
         return res.status(400).json({
           success: false,
@@ -721,11 +806,42 @@ const refreshToken = async (req, res) => {
 })
 }
 
+const getAccesslogs = async (req, res) => {
+  try {
+    const dataA = await accessLogModels.find({hadAccess: true}).sort({loginDate: -1})
+    return res.status(200).send({
+      success: true,
+      dataA
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+    });
+  }
+}
+const getAccesslogsFalse = async (req, res) => {
+  try {
+    const dataA = await accessLogModels.find({hadAccess: false}).sort({loginDate: -1})
+    return res.status(200).send({
+      success: true,
+      dataA
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
 module.exports = {
   signIn, 
   verifyTokenR, 
   refreshToken,
   TypeUserByToken,
+  getAccesslogs,
+  getAccesslogsFalse,
   NewsignIn, 
   signUp, 
   GetUserByID, 

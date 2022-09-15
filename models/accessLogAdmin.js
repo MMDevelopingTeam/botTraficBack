@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 
-const AccessLogSchema = new mongoose.Schema(
+const AccessLogAdminSchema = new mongoose.Schema(
     {
         loginDate: {type: Date, default: Date.now},
         user: { type: String, maxlength: 45, required: true },
         address: { type: String, maxlength: 45, required: true },
         userAgent: { type: String, maxlength: 45 },
         hadAccess: { type: Boolean, required: true },
-        User_idUser: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User', autopopulate: true }
+        UserAdmin_idUserAdmin: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserAdmin', autopopulate: true }
     }
 )
 
-AccessLogSchema.plugin(require('mongoose-autopopulate'));
+AccessLogAdminSchema.plugin(require('mongoose-autopopulate'));
 
-module.exports = mongoose.model('AccessLog', AccessLogSchema)
+module.exports = mongoose.model('AccessLogAdmin', AccessLogAdminSchema)

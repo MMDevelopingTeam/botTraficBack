@@ -2,6 +2,7 @@ const { encrypt, compare } = require('../utils/handleBcrypt')
 const userAdminModels = require('../models/userAdmin');
 const userModels = require('../models/user');
 const companyModels = require('../models/company');
+const accessLogAdminModels = require('../models/accessLogAdmin');
 const jwt = require('jsonwebtoken');
 
 // login
@@ -304,4 +305,34 @@ const updateUserAdmin = async (req, res) => {
   }
 }
 
-module.exports = {signIn, signUp, GetUserAdminByID, resetPassword, GetUserAdminByEmail, getMe, deleteUserAdmin, GetUserAdminByCompany, updateUserAdmin};
+const getAccesslogs = async (req, res) => {
+  try {
+    const dataA = await accessLogAdminModels.find({hadAccess: true}).sort({loginDate: -1})
+    return res.status(200).send({
+      success: true,
+      dataA
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+const getAccesslogsFalse = async (req, res) => {
+  try {
+    const dataA = await accessLogAdminModels.find({hadAccess: false}).sort({loginDate: -1})
+    return res.status(200).send({
+      success: true,
+      dataA
+    });
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: error.message
+    });
+  }
+}
+
+module.exports = {signIn, signUp, getAccesslogs, GetUserAdminByID, getAccesslogsFalse, resetPassword, GetUserAdminByEmail, getMe, deleteUserAdmin, GetUserAdminByCompany, updateUserAdmin};

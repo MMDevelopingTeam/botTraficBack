@@ -6,7 +6,7 @@ const ModelsSchema = new mongoose.Schema(
         isAllowed: {type: Boolean, default: true},
         isActive: {type: Boolean, default: true},
         platforms_idPlatform: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Platform', autopopulate: true },
-        company_idCompany: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'company_idCompany' }
+        company_idCompany: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Company', autopopulate: true }
     }
 )
 
