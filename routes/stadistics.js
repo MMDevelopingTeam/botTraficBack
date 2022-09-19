@@ -1,9 +1,10 @@
 const express = require("express");
-const { getAllActs, getAllComp, getAllLicences, getAllModels, getAllplatforms, getAllusers, getAllusersAdmin } = require("../controllers/stadistics");
+const { getAllActs, getAllComp, getAllLicences, getAllModels, getAllplatforms, getAllusers, getAllusersAdmin, getAllStatsAdmin } = require("../controllers/stadistics");
 const router = express.Router();
 
 router.get("/", getAllActs)
 router.get("/getAllComp", getAllComp)
+router.get("/getAllStatsAdmin/:id", getAllStatsAdmin)
 router.get("/getAllLicences", getAllLicences)
 router.get("/getAllModels", getAllModels)
 router.get("/getAllplatforms", getAllplatforms)

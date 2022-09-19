@@ -1,4 +1,5 @@
 const tableLogLaunchModels = require('../models/tableLogLaunch');
+const botContainerCompanysModels = require('../models/botContainerCompanys');
 const userModels = require('../models/user');
 
 // create register
@@ -173,6 +174,28 @@ const updateRegister = async (req, res) => {
     }
 }
 
+const resetRegisters = async (req, res) => {
+    try {
+        await tableLogLaunchModels.deleteMany()
+        const dataB = await botContainerCompanysModels.find()
+        for (let index = 0; index < dataB.length; index++) {
+            const data = await botContainerCompanysModels.findById({_id: dataB[index]._id})
+            if (data) {
+                data.acctsFree=data.acctsUsed
+            }
+            await data.save();
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Registros eliminados correctamente"
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+    }
+}
 const deleteRegister = async (req, res) => {
     const { id } = req.params;
     if (id === ':id') {
@@ -203,4 +226,4 @@ const deleteRegister = async (req, res) => {
 }
 
 
-module.exports = {createRegister, getRegisters, getRegisterByID, updateRegister, getRegisterByIDUser, deleteRegister};
+module.exports = {createRegister, getRegisters, resetRegisters, getRegisterByID, updateRegister, getRegisterByIDUser, deleteRegister};

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { signIn, signUp, GetUserByID, deleteUser, updateUser, GetUserByEmail, getMe, GetUser, tokenBot, verifyTokenR, tokenKillBot, getTypeUserByToken, GetUserByUser, GetUserByUserAndUserA, NewsignIn, refreshToken, TypeUserByToken, getAccesslogs, getAccesslogsFalse } = require("../controllers/user");
+const { signIn, signUp, GetUserByID, deleteUser, updateUser, GetUserByEmail, getMe, GetUser, tokenBot, verifyTokenR, tokenKillBot, getTypeUserByToken, GetUserByUser, GetUserByUserAndUserA, NewsignIn, refreshToken, TypeUserByToken, getAccesslogs, getAccesslogsFalse, GetUserByIDcomp } = require("../controllers/user");
 const { validateCreateSignIn, validateCreateSignUp, validateCreateToken, validateGetUserByU } = require("../validators/user");
 const { verifyToken } = require("../validators/validateToken");
 

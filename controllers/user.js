@@ -40,7 +40,8 @@ const signIn = async (req, res) => {
           user: email,
           address,
           hadAccess: true,
-          User_idUser: user._id
+          User_idUser: user._id,
+          company_idCompany: user.company_idCompany._id
         })
         await newALog.save()
         server.io.emit('updateStats', 'updateStats')
@@ -50,7 +51,8 @@ const signIn = async (req, res) => {
           user: email,
           address,
           hadAccess: true,
-          UserAdmin_idUserAdmin: user._id
+          UserAdmin_idUserAdmin: user._id,
+          company_idCompany: user.company_idCompany._id
         })
         await newALogA.save()
         server.io.emit('updateStats', 'updateStats')
@@ -67,7 +69,8 @@ const signIn = async (req, res) => {
           user: email,
           address,
           hadAccess: false,
-          User_idUser: user._id
+          User_idUser: user._id,
+          company_idCompany: user.company_idCompany._id
         })
         await newALog.save()
         server.io.emit('updateStats', 'updateStats')
@@ -77,7 +80,8 @@ const signIn = async (req, res) => {
           user: email,
           address,
           hadAccess: false,
-          UserAdmin_idUserAdmin: user._id
+          UserAdmin_idUserAdmin: user._id,
+          company_idCompany: user.company_idCompany._id
         })
         await newALogA.save()
         server.io.emit('updateStats', 'updateStats')
@@ -132,7 +136,8 @@ const NewsignIn = async (req, res) => {
               user: email,
               address: mac,
               hadAccess: true,
-              User_idUser: user._id
+              User_idUser: user._id,
+              company_idCompany: user.company_idCompany._id
             })
             await newALog.save()
             server.io.emit('updateStats', 'updateStats')
@@ -142,7 +147,8 @@ const NewsignIn = async (req, res) => {
               user: email,
               address: mac,
               hadAccess: true,
-              UserAdmin_idUserAdmin: user._id
+              UserAdmin_idUserAdmin: user._id,
+              company_idCompany: user.company_idCompany._id
             })
             await newALogA.save()
             server.io.emit('updateStats', 'updateStats')
@@ -164,7 +170,8 @@ const NewsignIn = async (req, res) => {
             user: email,
             address: mac,
             hadAccess: false,
-            User_idUser: user._id
+            User_idUser: user._id,
+            company_idCompany: user.company_idCompany._id
           })
           await newALog.save()
           server.io.emit('updateStats', 'updateStats')
@@ -174,7 +181,8 @@ const NewsignIn = async (req, res) => {
             user: email,
             address: mac,
             hadAccess: false,
-            UserAdmin_idUserAdmin: user._id
+            UserAdmin_idUserAdmin: user._id,
+            company_idCompany: user.company_idCompany._id
           })
           await newALogA.save()
           server.io.emit('updateStats', 'updateStats')
@@ -686,7 +694,7 @@ const tokenBot = async (req, res) => {
   }
 
   try {
-    const token = jwt.sign({nameModel, userId, company: dataModel.company_idCompany, nBots, idRegisterCompBotContainer}, process.env.KEY_JWT)
+    const token = jwt.sign({nameModel, userId, company: dataModel.company_idCompany, nBots, typeBot: dataRegister.registerLicenses.licenses_idLicense.type, idRegisterCompBotContainer}, process.env.KEY_JWT)
     return res.status(200).send({
       success: true,
       message: "Token creado correctamente",
@@ -844,7 +852,7 @@ module.exports = {
   getAccesslogsFalse,
   NewsignIn, 
   signUp, 
-  GetUserByID, 
+  GetUserByID,
   GetUser, 
   GetUserByEmail, 
   getMe, 
