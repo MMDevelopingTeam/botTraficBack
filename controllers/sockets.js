@@ -4,6 +4,7 @@ const socketsModels = require('../models/sockets');
 const userModels = require('../models/user');
 const userAdminModels = require('../models/userAdmin');
 const notificationsModels = require('../models/notifications');
+const botContainerModels = require('../models/botContainer');
 const companyModels = require('../models/company');
 var mongoose = require('mongoose');
 
@@ -65,6 +66,57 @@ const sendMessageForSuperUser = async (req, res) => {
         user= dataU || dataUa
         const newNotf = new notificationsModels({
             from: user._id,
+            to: dataS._id,
+            payload: JSON.stringify(req.body),
+            description: req.body.description,
+            date
+        })
+        const newNotfy = await newNotf.save();
+
+        const dataSc = await socketsModels.findOne({userID: dataS._id})
+        if (dataSc) {
+            server.io.in(dataSc.socketID).emit('mensaje-privado', newNotfy)
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Mensaje enviado correctamente"
+        });
+
+
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+    }
+}
+// send Message private superUser by bot
+const sendMessageForSuperUserByBot = async (req, res) => {
+    const { ip } = req.params
+    if (ip === ':ip') {
+        return res.status(400).send({
+            success: false,
+            message: "ip es requerido"
+        });
+    }
+    try {
+        const date = new Date()
+        const dataB = await botContainerModels.findOne({ip: ip})
+        if (!dataB) {
+            return res.status(400).send({
+                success: false,
+                message: "Bot no encontrado"
+            });
+        }
+        const dataS = await superUserModels.findOne()
+        if (!dataS) {
+            return res.status(400).send({
+                success: false,
+                message: "Usuario no encontrado"
+            });
+        }
+        const newNotf = new notificationsModels({
+            from: dataB._id,
             to: dataS._id,
             payload: JSON.stringify(req.body),
             description: req.body.description,
@@ -379,4 +431,4 @@ const sendNotificationExe = async (req, res) => {
     }
 }
 
-module.exports = {sendMessage, getClients, sendMessageForSuperUser, updateNotifications, sendMessageForUserAdmin, sendNotificationExe, getNotificationsByIdUser, getNotificationsByIdUserState};
+module.exports = {sendMessage, getClients, sendMessageForSuperUser, sendMessageForSuperUserByBot, updateNotifications, sendMessageForUserAdmin, sendNotificationExe, getNotificationsByIdUser, getNotificationsByIdUserState};

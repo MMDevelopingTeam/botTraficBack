@@ -99,6 +99,37 @@ const getBotContainerByID = async (req, res) => {
     }
 }
 
+// get by id botContainer
+const getBotContainerByIP = async (req, res) => {
+    const { ip } = req.params
+    if (ip === ':ip') {
+        return res.status(400).send({
+            success: false,
+            message: "ip es requerido"
+        });
+    }
+    try {
+        const dataBotContainer = await botContainerModels.findOne({ip})
+        if (!dataBotContainer) {
+            return res.status(400).send({
+                success: false,
+                message: "BotContainer no encontrado"
+            });
+        }
+        return res.status(200).send({
+            success: true,
+            message: "BotContainer traído correctamente.",
+            dataBotContainer
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+        
+    }
+}
+
 // get by id botContainer for id company
 const getBotContainerByIDCompany = async (req, res) => {
     let botContainers = []
@@ -392,4 +423,4 @@ const getRegisterCompanyBotContainer = async (req, res) => {
     }
 }
 
-module.exports = {createBotContainer, getBotContainer, getBotContainerByID, updateBotContainerArrayComp, updateBotContainer, getBotContainerByIDCompany, getRegisterCompanyBotContainer, updateBotContainerByIP, deleteBotContainer};
+module.exports = {createBotContainer, getBotContainer, getBotContainerByIP, getBotContainerByID, updateBotContainerArrayComp, updateBotContainer, getBotContainerByIDCompany, getRegisterCompanyBotContainer, updateBotContainerByIP, deleteBotContainer};

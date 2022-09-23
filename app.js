@@ -3,7 +3,6 @@ const initDB = require('./config/db')
 const cors = require("cors")
 const bodyParser = require('body-parser');
 const { Server } = require('./classes/server');
-
 const server = Server.instance;
 
 server.app.use(cors({ origin: true, credentials: true }));
