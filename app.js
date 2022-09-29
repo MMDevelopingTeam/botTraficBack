@@ -4,7 +4,16 @@ const cors = require("cors")
 const bodyParser = require('body-parser');
 const { Server } = require('./classes/server');
 const server = Server.instance;
+// const cache = require('express-expeditious')({
+//     namespace: 'expresscache',
+//     defaultTtl: '10 minute',
+//     statusCodeExpires: {
+//       404: '5minutes',
+//       500: 0
+//     }
+// })
 
+// server.app.use(cache);
 server.app.use(cors({ origin: true, credentials: true }));
 server.app.use(express.json());
 server.app.use(
