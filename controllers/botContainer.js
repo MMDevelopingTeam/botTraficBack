@@ -423,4 +423,31 @@ const getRegisterCompanyBotContainer = async (req, res) => {
     }
 }
 
-module.exports = {createBotContainer, getBotContainer, getBotContainerByIP, getBotContainerByID, updateBotContainerArrayComp, updateBotContainer, getBotContainerByIDCompany, getRegisterCompanyBotContainer, updateBotContainerByIP, deleteBotContainer};
+// validIdPackProxy
+const validIdPackProxy = async (req, res) => {
+    const { id } = req.params;
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    const dataB = await botContainerModels.find()
+    for (let index = 0; index < dataB.length; index++) {
+        let url = `http://${dataB[index].ip}:3000/api/storage/verifyIdPackProxy/${id}`;
+        const dataA = await axios(url)
+        if (dataA.data.existe) {
+            return res.status(400).send({
+                success: false,
+                message: "Paquete existente en bots Container"
+            });
+        }
+    }
+    return res.status(200).send({
+        success: true,
+        message: "Paquete no existente en bots Container"
+    });
+
+}
+
+module.exports = {createBotContainer, validIdPackProxy, getBotContainer, getBotContainerByIP, getBotContainerByID, updateBotContainerArrayComp, updateBotContainer, getBotContainerByIDCompany, getRegisterCompanyBotContainer, updateBotContainerByIP, deleteBotContainer};
