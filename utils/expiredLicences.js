@@ -56,10 +56,7 @@ const desactiveRegisterLicenceComp = async (id) => {
         }
         return console.log("Registro de licencia desactivado correctamente");
     } catch (error) {
-        return res.status(400).send({
-            success: false,
-            message: error.message
-        });
+        return console.log(error.message);
     }
 }
 
