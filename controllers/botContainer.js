@@ -17,7 +17,8 @@ const createBotContainer = async (req, res) => {
         try {
             let url = `http://${ip}:3000/api/storage/getaccts`;
             const dataA = await axios(url)
-            let allACt=dataA.data.acctsModelslength
+            let allACt=dataA.data.acctslength
+            console.log(allACt);
             const newBotContainer = new botContainerModels({
                 ip, typeBot, descriptionBot, latBot, lonBot, addressBot, averageDownloadSpeed, averageUploadSpeed, isp, accountsAll: allACt, accountsFree: allACt
             })
