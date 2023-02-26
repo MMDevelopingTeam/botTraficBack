@@ -225,5 +225,37 @@ const deleteRegister = async (req, res) => {
     }
 }
 
+const verifyKill = async (req, res) => {
+    const { id } = req.params;
+    if (id === ':id') {
+        return res.status(400).send({
+            success: false,
+            message: "id es requerido"
+        });
+    }
+    try {
+        const dataRegisterCompBot = await botContainerCompanysModels.findById({_id: id})
+        if (!dataRegisterCompBot) {
+            return res.status(400).send({
+                success: false,
+                message: "Registro no encotrado"
+            });
+        }
+        if(dataRegisterCompBot.acctsFree < dataRegisterCompBot.acctsUsed) {
+            dataRegisterCompBot.acctsFree++
+        }
+        await dataRegisterCompBot.save()
+        return res.status(200).send({
+            success: true,
+            message: "Registro actualizado correctamente"
+        });
+    } catch (error) {
+        return res.status(400).send({
+            success: false,
+            message: error.message
+        });
+    }
+}
 
-module.exports = {createRegister, getRegisters, resetRegisters, getRegisterByID, updateRegister, getRegisterByIDUser, deleteRegister};
+
+module.exports = {createRegister, getRegisters, resetRegisters, getRegisterByID, updateRegister, verifyKill, getRegisterByIDUser, deleteRegister};
