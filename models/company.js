@@ -9,8 +9,8 @@ const CompanySchema = new mongoose.Schema(
         logo: {type: String, maxlength:100},
         isConfigFull: {type: Boolean, default: false},
         registerLicensesArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'RegisterLicenses', autopopulate: true}],
-        devicesArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'AllowedDevices', autopopulate: true}],
-        devicesUserAdminArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'AllowedDevicesUserAdmin', autopopulate: true}]
+        devicesArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'AllowedDevices', autopopulate: true, unique: false}],
+        devicesUserAdminArray: [{type: mongoose.Schema.Types.ObjectId, ref: 'AllowedDevicesUserAdmin', autopopulate: true, unique: false}],
     }
 )
 
