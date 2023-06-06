@@ -15,12 +15,12 @@ const server = Server.instance;
 
 // server.app.use(cache);
 server.app.use(cors({ origin: true, credentials: true }));
-server.app.use(express.json());
+server.app.use(express.json({limit: '50mb'}));
 server.app.use(
-    bodyParser.json({limit: '20mb'})
+    bodyParser.json({limit: '100mb'})
 );
 server.app.use(
-    bodyParser.urlencoded({limit: '20mb', extended: true})
+    bodyParser.urlencoded({limit: '100mb', extended: true})
 );
 
 server.app.use((req, res, next) => {
